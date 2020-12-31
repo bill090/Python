@@ -1,0 +1,60 @@
+Player Name	GP	G	A.	Pts	PIM	Seasons	Yrs.	Pos.	Birthdate	Birthplace	Highest Level
+Spencer Abbott	1	0	0	0	0	2013-2014	1	F	1988-04-30	Hamilton, ONT	Major League
+Pontus Aberg	5	0	1	1	0	2019-2020	1	L	1993-09-23	Stockholm, Sweden	Major League
+Doug Acomb	2	0	1	1	0	1969-1970	1	L	1949-05-15	Toronto, ONT	Major League
+Russ Adam	8	1	2	3	11	1982-1983	1	C	1961-05-05	Windsor, ONT	Major League
+Kevyn Adams	58	5	8	13	46	1997-2000	3	C	1974-10-08	Washington, DC	Major League
+Stewart Adams	19	0	2	2	0	1932-1933	1	L	1904-09-16	Calgary, ALTA	Major League
+Gary Aldcorn	86	15	18	33	18	1956-1959	3	L	1935-03-07	Shaunavon, SASK	Major League
+Claire Alexander	123	10	29	39	30	1974-1977	3	D	1945-06-16	Collingwood, ONT	Major League
+Jason Allison	66	17	43	60	76	2005-2006	1	C	1975-05-29	North York, ONT	Major League
+Mike Allison	86	7	19	26	76	1986-1988	2	F	1961-03-28	Fort Frances, ONT	Major League
+Frederik Andersen	244	0	3	3	20	2016-2020	4	G	1989-10-02	Herning, Denmark	Major League
+Glenn Anderson	221	63	94	157	267	1991-1994	3	F	1960-10-02	Vancouver, BC	Major League
+John Anderson	534	189	204	393	168	1977-1985	8	L	1957-03-28	Toronto, ONT	Major League
+Dave Andreychuk	223	120	99	219	194	1992-1996	4	L	1963-09-29	Hamilton, ONT	Major League
+Greg Andrusak	9	0	1	1	4	1999-2000	1	D	1969-11-14	Cranbrook, BC	Major League
+Nikolai Antropov	509	125	166	291	477	1999-2009	9	R	1980-02-18	Ust-Kamenogorsk, Kazakhstan	Major League
+Syl Apps	423	201	231	432	56	1936-1948	10	C	1915-01-18	Paris, ONT	Major League
+Al Arbour	66	2	7	9	74	1961-1966	5	D	1932-11-01	Sudbury, ONT	Major League
+Jack Arbour	10	1	0	1	10	1928-1929	1	D	1898-03-07	Waubaushene, ONT	Major League
+Mark Arcobello	20	3	1	4	0	2015-2016	1	F	1988-08-12	Milford, CT	Major League
+Colby Armstrong	79	9	17	26	47	2010-2012	2	L	1982-11-23	Lloydminster, SASK	Major League
+George Armstrong	1188	296	417	713	721	1949-1971	21	C	1930-07-06	Skead, ONT	Major League
+Murray Armstrong	12	0	1	1	0	1937-1939	2	C	1916-01-01	Manor, SASK	Major League
+Norm "Red" Armstrong	7	1	1	2	2	1962-1963	1	R	1938-10-17	Owen Sound, ONT	Major League
+Tim Armstrong	11	1	0	1	6	1988-1989	1	C	1967-05-12	Toronto, ONT	Major League
+Johnny Arundel	3	0	0	0	9	1949-1950	1	D	1927-11-04	Winnipeg, MAN	Major League
+Don Ashby	141	26	40	66	34	1975-1979	4	C	1955-03-08	Kamloops, BC	Major League
+Carter Ashton	54	0	3	3	32	2011-2015	3	R	1991-04-01	Saskatoon, SASK	Major League
+Jean-Sebastien Aubin	31	0	0	0	0	2005-2007	2	G	1977-07-19	Montreal, PQ	Major League
+Normand Aubin	69	18	13	31	30	1981-1983	2	F	1960-07-26	Saint-Leonard, PQ	Major League
+Patrik Augusta	2	0	0	0	0	1993-1994	1	L	1969-11-13	Jihlava, Czech Rep.	Major League
+Keith Aulie	57	2	2	4	48	2010-2012	2	D	1989-06-11	Regina, SASK	Major League
+Pete Backor	36	4	5	9	6	1944-1945	1	D	1919-04-29	Fort William, ONT	Major League
+Bob Bailey	86	6	9	15	128	1953-1956	3	R	1931-05-29	Kenora, ONT	Major League
+Casey Bailey	6	1	0	1	2	2014-2015	1	R	1991-10-27	Anchorage, AK	Major League
+Irvine "Ace" Bailey	271	96	69	165	390	1927-1934	7	L	1903-07-03	Bracebridge, ONT	Major League
+Reid Bailey	1	0	0	0	2	1982-1983	1	D	1956-05-28	Toronto, ONT	Major League
+Jamie Baker	71	8	13	21	38	1996-1998	2	C	1966-08-31	Nepean, ONT	Major League
+Doug Baldwin	15	0	1	1	6	1945-1946	1	D	1922-11-02	Winnipeg, MAN	Major League
+Earl Balfour	80	14	6	20	48	1951-1958	4	L	1933-01-04	Toronto, ONT	Major League
+Andy Barbe	1	0	0	0	2	1950-1951	1	R	1923-07-27	Coniston, ONT	Major League
+Bill Barilko	252	26	36	62	456	1946-1951	5	D	1927-03-25	Timmins, ONT	Major League
+Tom Barrasso	4	0	0	0	0	2001-2002	1	G	1965-03-31	Boston, MA	Major League
+Tyson Barrie	70	5	34	39	16	2019-2020	1	D	1991-07-26	Victoria, BC	Major League
+Aldege "Baz" Bastien	5	0	0	0	0	1945-1946	1	G	1919-08-29	Timmins, ONT	Major League
+Andy Bathgate	70	19	44	63	42	1963-1965	2	C	1932-08-28	Winnipeg, MAN	Major League
+Bates Battaglia	95	12	19	31	52	2006-2008	2	L	1975-12-13	Chicago, IL	Major League
+Ken Baumgartner	200	7	7	14	520	1991-1996	5	L	1966-03-11	Flin Flon, MAN	Major League
+Bob Baun	739	29	140	169	1155	1956-1973	14	D	1936-09-09	Lanigan, SASK	Major League
+Francois Beauchemin	136	7	31	38	49	2009-2011	2	D	1980-06-04	Sorel, PQ	Major League
+Don Beaupre	11	0	0	0	14	1995-1997	2	G	1961-09-19	Kitchener, ONT	Major League
+Wade Belak	318	7	17	24	763	2000-2008	7	D	1976-07-03	Saskatoon, SASK	Major League
+Alain Belanger	9	0	1	1	6	1977-1978	1	R	1956-01-18	St. Janvier, PQ	Major League
+Ken Belanger	3	0	0	0	9	1994-1995	1	L	1974-05-14	Sault Ste. Marie, ONT	Major League
+Ed Belfour	170	0	5	5	52	2002-2006	3	G	1965-04-21	Carman, MAN	Major League
+Brendan Bell	32	1	4	5	19	2005-2007	2	D	1983-03-31	Ottawa, ONT	Major League
+Gordon Bell	8	0	0	0	0	1945-1946	1	G	1925-03-13	Portage la Prairie, MAN	Major League
+Mark Bell	35	4	6	10	60	2007-2008	1	C	1980-08-05	St. Paul's, ONT	Major League
+Jim Benning	364	37	136	173	289	1981-1987	6	D	1963-04-29	Edmonton, ALTA	Major League

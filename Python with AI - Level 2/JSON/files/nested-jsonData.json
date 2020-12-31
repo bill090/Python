@@ -1,0 +1,11 @@
+{
+    "name" : "John",
+    "age" : 31,
+    "married" : true,
+    "children" : ["Ann", "Billy"],
+    "address" : {
+        "street" : "2 King St.",
+        "city" : "Toronto",
+        "province" : "ON"
+    }
+}

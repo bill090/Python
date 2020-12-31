@@ -1,0 +1,16 @@
+132 204 is a deficient number.
+20 22 is a deficient number.
+1 0 is a abundant number.
+6 6 is a perfect number.
+1234 620 is a abundant number.
+111 41 is a abundant number.
+132 is a deficient number.
+20 is a deficient number.
+1 is a abundant number.
+6 is a perfect number.
+1234 is a abundant number.
+111 is a abundant number.
+10 is a abundant number.
+123 is a abundant number.
+530 is a abundant number.
+7768 is a abundant number.

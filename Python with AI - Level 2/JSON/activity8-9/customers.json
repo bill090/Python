@@ -1,0 +1,38 @@
+[
+    {
+        "age": 31,
+        "cars": [
+            {
+                "model": "BMW 230",
+                "mpg": 27.5
+            },
+            {
+                "model": "Ford Edge",
+                "mpg": 24.1
+            }
+        ],
+        "children": [
+            "Ann",
+            "Billy"
+        ],
+        "married": true,
+        "name": "John",
+        "pets": null
+    },
+    {
+        "name": "Ken",
+        "age": 32,
+        "married": true,
+        "children": [
+            "Cindy",
+            "Paul"
+        ],
+        "pets": null,
+        "cars": [
+            {
+                "model": "Honda Civic",
+                "mpg": 21.5
+            }
+        ]
+    }
+]

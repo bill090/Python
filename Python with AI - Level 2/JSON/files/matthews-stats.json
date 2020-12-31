@@ -1,0 +1,24 @@
+{
+    "person" : {
+        "id" : 8479318,
+        "fullName" : "Auston Matthews",
+        "firstName" : "Auston",
+        "lastName" : "Matthews",
+        "primaryNumber" : 34,
+        "birthDate" : "1997-09-17",
+        "height" : "6' 3\"",
+        "weight" : 220,
+        "active" : true,
+        "captain" : false,
+        "currentTeam" : {
+            "id" : 10,
+            "name" : "Toronto Maple Leafs"
+        },
+        "primaryPosition" : {
+            "code" : "C",
+            "name" : "Center",
+            "type" : "Forward",
+            "abbreviation" : "C"
+        }
+    }
+}
