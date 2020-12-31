@@ -1,6 +1,7 @@
 import pygame
 import time
 import random
+
 pygame.mixer.pre_init()
 pygame.init()
 gameDisplay = pygame.display.set_mode((1820, 980))
@@ -8,40 +9,44 @@ clock = pygame.time.Clock()
 fireBallImg = pygame.image.load('Python/Python with AI - Level 2/pygame/fireBall.png')
 carImg = pygame.image.load('Python/Python with AI - Level 2/pygame/car.png')
 pygame.display.set_caption('Box Dodging')
+
 def car(x, y):
     gameDisplay.blit(carImg, (x, y))
-x = 400
-y = 434
-x_change = 0
-chrashed = False
+
 def text_objects(text, font):
     textSurface = font.render(text, True, (0, 0, 0))
     return textSurface, textSurface.get_rect()
+
 def chrash():
     message_display("You crashed")
     pygame.mixer.music.load("Python/Python with AI - Level 2/pygame/Explosion+1.wav")
     pygame.mixer.music.play()
     time.sleep(3)
+
 def message_display(text):
     largeText = pygame.font.Font('freesansbold.ttf', 115)
     TextSurf, TextRect = text_objects(text, largeText)
     TextRect.center = (int(1820 / 2), int(980 / 2))
     gameDisplay.blit(TextSurf, TextRect)
     pygame.display.update()
+
 def things(thingx, thingy, thingw, thingh, color):
     pygame.draw.rect(gameDisplay, color, [thingx, thingy, thingw, thingh])
-firstZaWarudo = True
+
 def playMus(musPath):
     pygame.mixer.music.load(musPath)
     pygame.mixer.music.play()
+
 def playBackMus(backMusPath):
     pygame.mixer.music.load(backMusPath)
     pygame.mixer.music.play(-1)
+
 def displayMsg(msg, pos, fontSize):
     largeText = pygame.font.Font('freesansbold.ttf', fontSize)
     TextSurf, TextRect = text_objects(msg, largeText)
     TextRect.center = (pos[0], pos[1])
     gameDisplay.blit(TextSurf, TextRect)
+
 def button(activeColor, inactiveColor, buttonX, buttonY, buttonWidth, buttonHeight, msg):
     things(buttonX, buttonY, buttonWidth, buttonHeight, inactiveColor)
     if pygame.mouse.get_pos()[0] > buttonX and pygame.mouse.get_pos()[0] < buttonX + buttonWidth and pygame.mouse.get_pos()[1] > buttonY and pygame.mouse.get_pos()[1] < buttonY + buttonHeight:
@@ -50,14 +55,20 @@ def button(activeColor, inactiveColor, buttonX, buttonY, buttonWidth, buttonHeig
     TextSurf, TextRect = text_objects(msg, largeText)
     TextRect.center = (buttonX + int(buttonWidth/2), buttonY + int(buttonHeight/2))
     gameDisplay.blit(TextSurf, TextRect)
+
 def gameQuit():
     pygame.quit()
     quit()
+
 def frameUpdate():
     pygame.display.update()
     clock.tick(60)
+
 def fireBall(x, y):
     gameDisplay.blit(fireBallImg, (x, y))
+
+firstZaWarudo = True
+
 while True:
     
     #This is the reset code.
@@ -229,6 +240,7 @@ while True:
             Bwait = 0
             Bhit = True
             fireBallLaunched = False
+            
         # This area handles the box spawning.
 
         if thingA_starty < 980 and not(Ahit):
