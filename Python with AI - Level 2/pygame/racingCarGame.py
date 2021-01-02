@@ -6,12 +6,15 @@ pygame.mixer.pre_init()
 pygame.init()
 gameDisplay = pygame.display.set_mode((1820, 980))
 clock = pygame.time.Clock()
-fireBallImg = pygame.image.load('Python/Python with AI - Level 2/pygame/fireBall.png')
-carImg = pygame.image.load('Python/Python with AI - Level 2/pygame/car.png')
+fireBallImg = pygame.image.load('Python with AI - Level 2/pygame/fireBall.png')
+carImg = pygame.image.load('Python with AI - Level 2/pygame/car.png')
 pygame.display.set_caption('Box Dodging')
+enemyCars = [pygame.image.load('Python with AI - Level 2/pygame/car4.png'), pygame.image.load('Python with AI - Level 2/pygame/car2.png'), pygame.image.load('Python with AI - Level 2/pygame/car3.png')]
+enemyCarsWidths = [76, 76, 96]
+enemyCarsHeights = [166, 171, 201]
 
-def car(x, y):
-    gameDisplay.blit(carImg, (x, y))
+def car(x, y, carImage):
+    gameDisplay.blit(carImage, (x, y))
 
 def text_objects(text, font):
     textSurface = font.render(text, True, (0, 0, 0))
@@ -19,7 +22,7 @@ def text_objects(text, font):
 
 def chrash():
     message_display("You crashed")
-    pygame.mixer.music.load("Python/Python with AI - Level 2/pygame/Explosion+1.wav")
+    pygame.mixer.music.load("Python with AI - Level 2/pygame/Explosion+1.wav")
     pygame.mixer.music.play()
     time.sleep(3)
 
@@ -73,6 +76,8 @@ while True:
     
     #This is the reset code.
 
+    fireBallCoolDownTime = 60
+    fireBallCoolDown = 0
     Ahit = False
     Bhit = False
     fireBallX = 0
@@ -92,21 +97,22 @@ while True:
     thingA_startx = random.randint(0, 600)
     thingA_starty = -600
     thingA_speed = 7
-    thingA_width = 100
-    thingA_height = 100
+    AcarNum = random.randint(0, len(enemyCars) - 1)
+    Acar = enemyCars[AcarNum]
+    thingA_height = enemyCarsHeights[AcarNum]
+    thingA_width = enemyCarsWidths[AcarNum]
     thingB_startx = random.randint(0, 600)
     thingB_starty = -600
     thingB_speed = 7
-    thingB_width = 100
-    thingB_height = 100
+    BcarNum = random.randint(0, len(enemyCars) - 1)
+    Bcar = enemyCars[AcarNum]
+    thingB_height = enemyCarsHeights[AcarNum]
+    thingB_width = enemyCarsWidths[AcarNum]
     points = 0
     passedA = False
     passedB = False
     speedIncreaseCounter = 3
     carSpeed = 5
-    Acolora = random.randint(0, 200)
-    Acolorb = random.randint(0, 200)
-    Acolorc = random.randint(0, 200)
     Bcolora = random.randint(0, 200)
     Bcolorb = random.randint(0, 200)
     Bcolorc = random.randint(0, 200)
@@ -139,7 +145,7 @@ while True:
 
     # This line starts the background music
 
-    playBackMus("Python/Python with AI - Level 2/pygame/JoJo's Bizarre Adventure_Golden Wind OST_ _Giorno's Theme_.wav")
+    playBackMus("Python with AI - Level 2/pygame/JoJo's Bizarre Adventure_Golden Wind OST_ _Giorno's Theme_.wav")
     
 
     # This is the game's loop
@@ -173,12 +179,13 @@ while True:
                     zaWarudoCoolDown = int(zaWarudoCoolDownTime/1)
                     zaWarudoTime = int(zaWarudoMaxTime/1) 
                     pygame.mixer.music.set_volume(3)
-                    playMus("Python/Python with AI - Level 2/pygame/zaWarudo.wav")
-                if event.key == pygame.K_LSHIFT and not(fireBallLaunched):
+                    playMus("Python with AI - Level 2/pygame/zaWarudo.wav")
+                if event.key == pygame.K_LSHIFT and not(fireBallLaunched) and fireBallCoolDown == 0:
                     fireBall(x, y - 148)
                     fireBallX = x
                     fireBallY = 980 - 166 - 148
                     fireBallLaunched = True
+                    fireBallCoolDown = fireBallCoolDownTime
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_d or event.key == pygame.K_a:
                     x_change = 0
@@ -241,10 +248,10 @@ while True:
             Bhit = True
             fireBallLaunched = False
             
-        # This area handles the box spawning.
+        # This area handles the enemy spawning.
 
         if thingA_starty < 980 and not(Ahit):
-            things(thingA_startx, thingA_starty, thingA_width, thingA_height, (Acolora, Acolorb, Acolorc))
+            car(thingA_startx, thingA_starty, Acar)
         elif (Await == 0 and Aresetted) or Ahit:
             thingA_width = random.randint(100, 200)
             thingA_height = random.randint(100, 200)
@@ -258,17 +265,19 @@ while True:
                 AbaseSpeed += 1
                 BbaseSpeed += 1
                 carSpeed += 1
-            Acolora = random.randint(0, 200)
-            Acolorb = random.randint(0, 200)
-            Acolorc = random.randint(0, 200)
-            things(thingA_startx, thingA_starty, thingA_width, thingA_height, (Acolora, Acolorb, Acolorc))
+                fireBallSpeed += 1
+            AcarNum = random.randint(0, len(enemyCars) - 1)
+            Acar = enemyCars[AcarNum]
+            thingA_height = enemyCarsHeights[AcarNum]
+            thingA_width = enemyCarsWidths[AcarNum]
+            car(thingA_startx, thingA_starty, Acar)
             Aresetted = False
             Ahit = False
         else:
             Aresetted = True
             Await  = random.randint(0, 120)
         if thingB_starty < 980 and not(Bhit):
-            things(thingB_startx, thingB_starty, thingB_width, thingB_height, (Bcolora, Bcolorb, Bcolorc))
+            car(thingB_startx, thingB_starty, Bcar)
         elif (Bwait == 0 and Bresetted) or Bhit:
             thingB_width = random.randint(100, 200)
             thingB_height = random.randint(100, 200)
@@ -282,11 +291,14 @@ while True:
                 AbaseSpeed += 1
                 BbaseSpeed += 1
                 carSpeed += 1
-            Bcolora = random.randint(0, 200)
-            Bcolorb = random.randint(0, 200)
-            Bcolorc = random.randint(0, 200)
-            things(thingB_startx, thingB_starty, thingB_width, thingB_height, (Bcolora, Bcolorb, Bcolorc))
+                fireBallSpeed += 1
+            BcarNum = random.randint(0, len(enemyCars) - 1)
+            Bcar = enemyCars[BcarNum]
+            thingB_height = enemyCarsHeights[BcarNum]
+            thingB_width = enemyCarsWidths[BcarNum]
+            car(thingB_startx, thingB_starty, Bcar)
             Bresetted = False
+            Bhit = False
         else:
             Bresetted = True
             Bwait  = random.randint(0, 120)
@@ -295,15 +307,15 @@ while True:
 
         if firstZaWarudo and zaWarudoEffect:
             displayMsg("You're DIO?", (400, 300), 20)
-        car(x, y)
+        car(x, y, carImg)
         if zaWarudoEffect:
             zaWarudoTime += -1
         if zaWarudoTime == 90:
-            playMus("Python/Python with AI - Level 2/pygame/timeResumes.wav")
+            playMus("Python with AI - Level 2/pygame/timeResumes.wav")
         if zaWarudoTime <= 0 and zaWarudoEffect:
             zaWarudoEffect = False
             firstZaWarudo = False
-            playBackMus("Python/Python with AI - Level 2/pygame/JoJo's Bizarre Adventure_Golden Wind OST_ _Giorno's Theme_.wav")
+            playBackMus("Python with AI - Level 2/pygame/JoJo's Bizarre Adventure_Golden Wind OST_ _Giorno's Theme_.wav")
         if zaWarudoCoolDown <= 0:
             zaWarudoCoolDownOver = True
 
@@ -318,7 +330,11 @@ while True:
 
         frameUpdate()
 
+        # This is the fireball cooldown
+
+        if not(fireBallLaunched) and fireBallCoolDown > 0:
+            fireBallCoolDown += -1
+
         # This clears the screen for the next frame
 
         gameDisplay.fill((255, 255, 255, 0))
-gameQuit()
