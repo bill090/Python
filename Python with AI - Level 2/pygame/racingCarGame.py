@@ -105,17 +105,14 @@ while True:
     thingB_starty = -600
     thingB_speed = 7
     BcarNum = random.randint(0, len(enemyCars) - 1)
-    Bcar = enemyCars[AcarNum]
-    thingB_height = enemyCarsHeights[AcarNum]
-    thingB_width = enemyCarsWidths[AcarNum]
+    Bcar = enemyCars[BcarNum]
+    thingB_height = enemyCarsHeights[BcarNum]
+    thingB_width = enemyCarsWidths[BcarNum]
     points = 0
     passedA = False
     passedB = False
     speedIncreaseCounter = 3
     carSpeed = 5
-    Bcolora = random.randint(0, 200)
-    Bcolorb = random.randint(0, 200)
-    Bcolorc = random.randint(0, 200)
     chrashed = False
     x_change = 0
     x = 400
@@ -253,10 +250,6 @@ while True:
         if thingA_starty < 980 and not(Ahit):
             car(thingA_startx, thingA_starty, Acar)
         elif (Await == 0 and Aresetted) or Ahit:
-            thingA_width = random.randint(100, 200)
-            thingA_height = random.randint(100, 200)
-            thingA_startx = random.randint(0, 1920 - thingA_width)
-            thingA_starty = -100 - thingA_height
             if not(Ahit):
                 speedIncreaseCounter = speedIncreaseCounter - 1
                 passedA = False
@@ -270,6 +263,8 @@ while True:
             Acar = enemyCars[AcarNum]
             thingA_height = enemyCarsHeights[AcarNum]
             thingA_width = enemyCarsWidths[AcarNum]
+            thingA_startx = random.randint(0, 1920 - thingA_width)
+            thingA_starty = -100 - thingA_height
             car(thingA_startx, thingA_starty, Acar)
             Aresetted = False
             Ahit = False
@@ -279,10 +274,7 @@ while True:
         if thingB_starty < 980 and not(Bhit):
             car(thingB_startx, thingB_starty, Bcar)
         elif (Bwait == 0 and Bresetted) or Bhit:
-            thingB_width = random.randint(100, 200)
-            thingB_height = random.randint(100, 200)
-            thingB_startx = random.randint(0, 1920 - thingB_width)
-            thingB_starty = -100 - thingB_height
+            
             if not(Bhit):
                 speedIncreaseCounter = speedIncreaseCounter - 1
                 passedB = False
@@ -296,6 +288,8 @@ while True:
             Bcar = enemyCars[BcarNum]
             thingB_height = enemyCarsHeights[BcarNum]
             thingB_width = enemyCarsWidths[BcarNum]
+            thingB_startx = random.randint(0, 1920 - thingB_width)
+            thingB_starty = -100 - thingB_height
             car(thingB_startx, thingB_starty, Bcar)
             Bresetted = False
             Bhit = False
