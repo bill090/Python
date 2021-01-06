@@ -1,9 +1,9 @@
 import pygame
 import time
 import random
-
 pygame.mixer.pre_init()
 pygame.init()
+pygame.mixer.music.set_volume(1)
 gameDisplay = pygame.display.set_mode((1820, 980))
 clock = pygame.time.Clock()
 fireBallImg = pygame.image.load('Python with AI - Level 2/pygame/fireBall.png')
@@ -71,6 +71,7 @@ def fireBall(x, y):
     gameDisplay.blit(fireBallImg, (x, y))
 
 firstZaWarudo = True
+volume = 100
 
 while True:
     
@@ -131,6 +132,8 @@ while True:
         displayMsg("press space to start and q to quit. or the buttons", (int(1920/2), int(980/2) + 100), 20)
         button((255, 40, 0), (255, 0, 0), 1120, 780, 100, 100, "Quit?")
         button((0, 255, 0), (90, 238, 90), 600, 780, 100, 100, "START?")
+        button((255, 255, 255), (100, 100, 100), 390, 780, 200, 100, "Change Volume?")
+        button((255, 255, 255), (255, 255, 255), 200, 100, 1, 1, str(volume))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 gameQuit()
@@ -138,8 +141,14 @@ while True:
                 menuEnd = True
             if (event.type == pygame.KEYDOWN and event.key == pygame.K_q) or (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 1120 and event.pos[0] < 1220 and event.pos[1] > 780 and event.pos[1] < 880 and event.button == 1):
                 gameQuit()
+            if event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 390 and event.pos[0] < 590 and event.pos[1] > 780 and event.pos[1] < 880 and event.button == 1:
+                if volume == 100:
+                    volume = 0
+                else:
+                    volume += 10
         frameUpdate()
-
+        gameDisplay.fill((255, 255, 255, 0))
+    pygame.mixer.music.set_volume(volume / 100)
     # This line starts the background music
 
     playBackMus("Python with AI - Level 2/pygame/JoJo's Bizarre Adventure_Golden Wind OST_ _Giorno's Theme_.wav")
