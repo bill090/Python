@@ -133,7 +133,7 @@ while True:
         button((255, 40, 0), (255, 0, 0), 1120, 780, 100, 100, "Quit?")
         button((0, 255, 0), (90, 238, 90), 600, 780, 100, 100, "START?")
         button((255, 255, 255), (100, 100, 100), 390, 780, 200, 100, "Change Volume?")
-        button((255, 255, 255), (255, 255, 255), 200, 100, 1, 1, str(volume))
+        button((255, 255, 255), (255, 255, 255), 200, 100, 1, 1, f"Volume: {str(volume)}%")
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 gameQuit()
