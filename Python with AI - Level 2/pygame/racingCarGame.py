@@ -77,6 +77,9 @@ while True:
     
     #This is the reset code.
 
+    startChoiceEnd = False
+    resetting = False
+    unlimitedFireBalls = False
     fireBallCoolDownTime = 60
     fireBallCoolDown = 0
     Ahit = False
@@ -135,11 +138,9 @@ while True:
         button((255, 255, 255), (100, 100, 100), 390, 780, 200, 100, "Change Volume?")
         button((255, 255, 255), (255, 255, 255), 200, 100, 1, 1, f"Volume: {str(volume)}%")
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                gameQuit()
             if (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE) or (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 600 and event.pos[0] < 700 and event.pos[1] > 780 and event.pos[1] < 980 and event.button == 1):
                 menuEnd = True
-            if (event.type == pygame.KEYDOWN and event.key == pygame.K_q) or (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 1120 and event.pos[0] < 1220 and event.pos[1] > 780 and event.pos[1] < 880 and event.button == 1):
+            if (event.type == pygame.KEYDOWN and event.key == pygame.K_q) or (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 1120 and event.pos[0] < 1220 and event.pos[1] > 780 and event.pos[1] < 880 and event.button == 1) or event.type == pygame.QUIT:
                 gameQuit()
             if event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 390 and event.pos[0] < 590 and event.pos[1] > 780 and event.pos[1] < 880 and event.button == 1:
                 if volume == 100:
@@ -149,10 +150,41 @@ while True:
         frameUpdate()
         gameDisplay.fill((255, 255, 255, 0))
     pygame.mixer.music.set_volume(volume / 100)
+
+    # This part of the code decides whether you want to play 5 fireball or infinite fireball
+
+    AfterMenu = True
+    AfterMenuCount = 30
+    while not startChoiceEnd:
+        button((0, 255, 0), (90, 238, 90), 1020, 780, 200, 100, "Five Fireballs")
+        button((0, 255, 0), (90, 238, 90), 500, 780, 200, 100, "Infinite Fireballs")
+        button((0, 255, 0), (90, 238, 90), 810, 780, 100, 100, "Back")
+        frameUpdate()
+        gameDisplay.fill((255, 255, 255, 0))
+        if not AfterMenu:
+            for event in pygame.event.get():
+                if (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 1020 and event.pos[0] < 1220 and event.pos[1] > 780 and event.pos[1] < 980 and event.button == 1):
+                    fireBallsLeft = 5
+                    unlimitedFireBalls = False
+                    startChoiceEnd = True
+                if (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 500 and event.pos[0] < 700 and event.pos[1] > 780 and event.pos[1] < 980 and event.button == 1):
+                    fireBallsLeft = "infinity"
+                    unlimitedFireBalls = True
+                    startChoiceEnd = True
+                if (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 810 and event.pos[0] < 910 and event.pos[1] > 780 and event.pos[1] < 980 and event.button == 1):
+                    resetting = True
+                    startChoiceEnd = True
+                if event.type == pygame.QUIT:
+                    gameQuit()
+        elif AfterMenuCount == 0:
+            AfterMenu = False
+        AfterMenuCount += -1
+    if resetting:
+        continue
+
     # This line starts the background music
 
     playBackMus("Python with AI - Level 2/pygame/JoJo's Bizarre Adventure_Golden Wind OST_ _Giorno's Theme_.wav")
-    
 
     # This is the game's loop
 
@@ -160,6 +192,10 @@ while True:
         largeText = pygame.font.Font('freesansbold.ttf', 20)
         TextSurf, TextRect = text_objects(f"score: {points}", largeText)
         TextRect.center = (200, 50)
+        gameDisplay.blit(TextSurf, TextRect)
+        largeText = pygame.font.Font('freesansbold.ttf', 20)
+        TextSurf, TextRect = text_objects(f"fireballs left: {fireBallsLeft}", largeText)
+        TextRect.center = (1620, 50)
         gameDisplay.blit(TextSurf, TextRect)
         gameEvents = pygame.event.get()
 
@@ -186,12 +222,14 @@ while True:
                     zaWarudoTime = int(zaWarudoMaxTime/1) 
                     pygame.mixer.music.set_volume(3)
                     playMus("Python with AI - Level 2/pygame/zaWarudo.wav")
-                if event.key == pygame.K_LSHIFT and not(fireBallLaunched) and fireBallCoolDown == 0:
+                if event.key == pygame.K_LSHIFT and not(fireBallLaunched) and fireBallCoolDown == 0 and (unlimitedFireBalls or fireBallsLeft > 0):
                     fireBall(x, y - 148)
                     fireBallX = x
                     fireBallY = 980 - 166 - 148
                     fireBallLaunched = True
                     fireBallCoolDown = fireBallCoolDownTime
+                    if not unlimitedFireBalls:
+                        fireBallsLeft += -1
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_d or event.key == pygame.K_a:
                     x_change = 0
