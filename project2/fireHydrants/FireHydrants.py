@@ -1,8 +1,8 @@
 import json, datetime
-start = datetime.datetime.now()
 from math import sin, cos, sqrt, atan2, radians, inf
 distances = []
 point1 = [int(input("What is your latitude?  ")), int(input("What is your longitude?  "))]
+start = datetime.datetime.now()
 def calculate_distance(point1, point2):
     # approximate radius of earth in km
     R = 6373.0
@@ -19,7 +19,7 @@ def calculate_distance(point1, point2):
 
     distance = R * c
     return distance
-fireHydrantsList = open("project2/Fire Hydrants Data.json", "r")
+fireHydrantsList = open("project2/fireHydrants/Fire Hydrants Data.json", "r")
 fireHydrantsUTF8BOM = fireHydrantsList.read()
 fireHydrants = json.loads(fireHydrantsUTF8BOM)
 fireHydrantsList.close()
