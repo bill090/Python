@@ -12,7 +12,6 @@ pygame.display.set_caption('Box Dodging')
 enemyCars = [pygame.image.load('Python with AI - Level 2/pygame/car4.png'), pygame.image.load('Python with AI - Level 2/pygame/car2.png'), pygame.image.load('Python with AI - Level 2/pygame/car3.png')]
 enemyCarsWidths = [76, 76, 96]
 enemyCarsHeights = [166, 171, 201]
-
 def car(x, y, carImage):
     gameDisplay.blit(carImage, (x, y))
 
@@ -77,6 +76,7 @@ while True:
     
     #This is the reset code.
 
+    fireBallsLeft = 5
     startChoiceEnd = False
     resetting = False
     unlimitedFireBalls = False
@@ -156,9 +156,11 @@ while True:
     AfterMenu = True
     AfterMenuCount = 30
     while not startChoiceEnd:
-        button((0, 255, 0), (90, 238, 90), 1020, 780, 200, 100, "Five Fireballs")
+        button((0, 255, 0), (90, 238, 90), 1020, 780, 200, 100, f"{fireBallsLeft} Fireballs")
         button((0, 255, 0), (90, 238, 90), 500, 780, 200, 100, "Infinite Fireballs")
         button((0, 255, 0), (90, 238, 90), 810, 780, 100, 100, "Back")
+        button((0, 255, 0), (90, 238, 90), 1270, 830, 45, 45, "More")
+        button((0, 255, 0), (90, 238, 90), 1270, 780, 45, 45, "Less")
         frameUpdate()
         gameDisplay.fill((255, 255, 255, 0))
         if not AfterMenu:
@@ -174,6 +176,11 @@ while True:
                 if (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 810 and event.pos[0] < 910 and event.pos[1] > 780 and event.pos[1] < 980 and event.button == 1):
                     resetting = True
                     startChoiceEnd = True
+                if (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 1270 and event.pos[0] < 1350 and event.pos[1] > 780 and event.pos[1] < 825 and event.button == 1):
+                    if (fireBallsLeft > 0):
+                        fireBallsLeft += -1
+                if (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 1270 and event.pos[0] < 1350 and event.pos[1] > 830 and event.pos[1] < 855 and event.button == 1):
+                    fireBallsLeft += 1
                 if event.type == pygame.QUIT:
                     gameQuit()
         elif AfterMenuCount == 0:
@@ -222,7 +229,7 @@ while True:
                     zaWarudoTime = int(zaWarudoMaxTime/1) 
                     pygame.mixer.music.set_volume(3)
                     playMus("Python with AI - Level 2/pygame/zaWarudo.wav")
-                if event.key == pygame.K_LSHIFT and not(fireBallLaunched) and fireBallCoolDown == 0 and (unlimitedFireBalls or fireBallsLeft > 0):
+                if event.key == pygame.K_LSHIFT and not(fireBallLaunched) and (fireBallCoolDown == 0 and not(unlimitedFireBalls) or fireBallsLeft > 0):
                     fireBall(x, y - 148)
                     fireBallX = x
                     fireBallY = 980 - 166 - 148
