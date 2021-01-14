@@ -71,12 +71,12 @@ def fireBall(x, y):
 
 firstZaWarudo = True
 volume = 100
+fireBallsLeft = 5
 
 while True:
     
     #This is the reset code.
 
-    fireBallsLeft = 5
     startChoiceEnd = False
     resetting = False
     unlimitedFireBalls = False
@@ -166,7 +166,6 @@ while True:
         if not AfterMenu:
             for event in pygame.event.get():
                 if (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 1020 and event.pos[0] < 1220 and event.pos[1] > 780 and event.pos[1] < 980 and event.button == 1):
-                    fireBallsLeft = 5
                     unlimitedFireBalls = False
                     startChoiceEnd = True
                 if (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 500 and event.pos[0] < 700 and event.pos[1] > 780 and event.pos[1] < 980 and event.button == 1):
@@ -229,13 +228,13 @@ while True:
                     zaWarudoTime = int(zaWarudoMaxTime/1) 
                     pygame.mixer.music.set_volume(3)
                     playMus("Python with AI - Level 2/pygame/zaWarudo.wav")
-                if event.key == pygame.K_LSHIFT and not(fireBallLaunched) and (fireBallCoolDown == 0 and not(unlimitedFireBalls) or fireBallsLeft > 0):
+                if event.key == pygame.K_LSHIFT and not(fireBallLaunched) and ((not(unlimitedFireBalls) and fireBallsLeft > 0) or (unlimitedFireBalls and fireBallCoolDown == 0)):
                     fireBall(x, y - 148)
                     fireBallX = x
                     fireBallY = 980 - 166 - 148
                     fireBallLaunched = True
                     fireBallCoolDown = fireBallCoolDownTime
-                    if not unlimitedFireBalls:
+                    if not(unlimitedFireBalls):
                         fireBallsLeft += -1
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_d or event.key == pygame.K_a:
