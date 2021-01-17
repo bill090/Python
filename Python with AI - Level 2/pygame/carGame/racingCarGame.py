@@ -6,10 +6,10 @@ pygame.init()
 pygame.mixer.music.set_volume(1)
 gameDisplay = pygame.display.set_mode((1820, 980))
 clock = pygame.time.Clock()
-fireBallImg = pygame.image.load('Python with AI - Level 2/pygame/fireBall.png')
-carImg = pygame.image.load('Python with AI - Level 2/pygame/car.png')
+fireBallImg = pygame.image.load('Python with AI - Level 2/pygame/carGame/fireBall.png')
+carImg = pygame.image.load('Python with AI - Level 2/pygame/carGame/car.png')
 pygame.display.set_caption('Box Dodging')
-enemyCars = [pygame.image.load('Python with AI - Level 2/pygame/car4.png'), pygame.image.load('Python with AI - Level 2/pygame/car2.png'), pygame.image.load('Python with AI - Level 2/pygame/car3.png')]
+enemyCars = [pygame.image.load('Python with AI - Level 2/pygame/carGame/car4.png'), pygame.image.load('Python with AI - Level 2/pygame/carGame/car2.png'), pygame.image.load('Python with AI - Level 2/pygame/carGame/car3.png')]
 enemyCarsWidths = [76, 76, 96]
 enemyCarsHeights = [166, 171, 201]
 def car(x, y, carImage):
@@ -20,17 +20,11 @@ def text_objects(text, font):
     return textSurface, textSurface.get_rect()
 
 def chrash():
-    message_display("You crashed")
-    pygame.mixer.music.load("Python with AI - Level 2/pygame/Explosion+1.wav")
+    displayMsg("You died", (int(1820 / 2), int(980 / 2)), 115)
+    frameUpdate()
+    pygame.mixer.music.load("Python with AI - Level 2/pygame/carGame/Explosion+1.wav")
     pygame.mixer.music.play()
     time.sleep(3)
-
-def message_display(text):
-    largeText = pygame.font.Font('freesansbold.ttf', 115)
-    TextSurf, TextRect = text_objects(text, largeText)
-    TextRect.center = (int(1820 / 2), int(980 / 2))
-    gameDisplay.blit(TextSurf, TextRect)
-    pygame.display.update()
 
 def things(thingx, thingy, thingw, thingh, color):
     pygame.draw.rect(gameDisplay, color, [thingx, thingy, thingw, thingh])
@@ -190,7 +184,7 @@ while True:
 
     # This line starts the background music
 
-    playBackMus("Python with AI - Level 2/pygame/JoJo's Bizarre Adventure_Golden Wind OST_ _Giorno's Theme_.wav")
+    playBackMus("Python with AI - Level 2/pygame/carGame/JoJo's Bizarre Adventure_Golden Wind OST_ _Giorno's Theme_.wav")
 
     # This is the game's loop
 
@@ -227,7 +221,7 @@ while True:
                     zaWarudoCoolDown = int(zaWarudoCoolDownTime/1)
                     zaWarudoTime = int(zaWarudoMaxTime/1) 
                     pygame.mixer.music.set_volume(3)
-                    playMus("Python with AI - Level 2/pygame/zaWarudo.wav")
+                    playMus("Python with AI - Level 2/pygame/carGame/zaWarudo.wav")
                 if event.key == pygame.K_LSHIFT and not(fireBallLaunched) and ((not(unlimitedFireBalls) and fireBallsLeft > 0) or (unlimitedFireBalls and fireBallCoolDown == 0)):
                     fireBall(x, y - 148)
                     fireBallX = x
@@ -358,11 +352,11 @@ while True:
         if zaWarudoEffect:
             zaWarudoTime += -1
         if zaWarudoTime == 90:
-            playMus("Python with AI - Level 2/pygame/timeResumes.wav")
+            playMus("Python with AI - Level 2/pygame/carGame/timeResumes.wav")
         if zaWarudoTime <= 0 and zaWarudoEffect:
             zaWarudoEffect = False
             firstZaWarudo = False
-            playBackMus("Python with AI - Level 2/pygame/JoJo's Bizarre Adventure_Golden Wind OST_ _Giorno's Theme_.wav")
+            playBackMus("Python with AI - Level 2/pygame/carGame/JoJo's Bizarre Adventure_Golden Wind OST_ _Giorno's Theme_.wav")
         if zaWarudoCoolDown <= 0:
             zaWarudoCoolDownOver = True
 
