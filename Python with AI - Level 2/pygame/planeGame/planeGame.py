@@ -65,6 +65,22 @@ missile = pygame.image.load("Python with AI - Level 2/pygame/planeGame/misslle.p
 bomb = pygame.image.load("Python with AI - Level 2/pygame/planeGame/B1.png")
 player = pygame.image.load("Python with AI - Level 2/pygame/planeGame/RFA Fighter.png")
 
+# define enemy class
+
+class Enemy:
+    def __init__(self, x, y, imageNum, shot, respawnWait, x_change, y_change):
+        self.x = x
+        self.y = y
+        self.shot = shot
+        self.imageNum = imageNum
+        self.respawnWait = respawnWait
+        self.x_change = x_change
+        self.y_change = y_change
+    def move(self):
+        self.x += self.x_change
+        self.y += self.y_change
+        return (x, y)
+
 while True:
 
     # reset variables
