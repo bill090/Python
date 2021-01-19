@@ -86,7 +86,7 @@ class Enemy:
     def move(self):
         self.x += self.x_change
         self.y += self.y_change
-        return (self.x, self.y)
+        return (int(self.x), int(self.y))
     def calculate(self):
         self.yMovementTime += 1
         if self.yMovementTime == 21:
@@ -111,7 +111,7 @@ class Bomb:
         self.speed = speed
     def move(self):
         self.y += self.speed
-        return (self.x, self.y)
+        return (int(self.x), int(self.y))
 
 # define missile class
 
@@ -125,7 +125,7 @@ class Missile:
     def move(self):
         self.x_change += self.speed * self.direction
         self.y += 0 - self.speed
-        return (self.x + self.x_change, self.y)
+        return (int(self.x + self.x_change), int(self.y))
 
 
 while True:
@@ -197,16 +197,18 @@ while True:
 
         x += x_change
         y += y_change
+        x = int(x)
+        y = int(y)
 
         # missile management
 
         if shootDelay > 0:
             shootDelay += -1
         if shooting and shootDelay == 0:
-            missiles.append(Missile(x, y - 76, x_change / 5, 5, 2))
+            missiles.append(Missile(x + 42, y - 76, x_change / 5, 10, 1))
             shootDelay = 10
         for bullet in missiles:
-            if bullet.y > 980:
+            if bullet.y > 980 or bullet.x > 1820 or bullet.x < 0:
                 missiles.remove(bullet)
             draw(bullet.move(), missile)
 
@@ -223,7 +225,7 @@ while True:
 
         for bullet in missiles:
             for enemy in enemies:
-                if ((bullet.x + 50) > enemy.x and bullet.x < (enemy.x + 110)) and ((bullet.y + 50) > enemy.y and bullet.y < (enemy.y + enemyHeights[enemy.imageNum])):
+                if ((bullet.x + bullet.x_change + 50) > enemy.x and (bullet.x + bullet.x_change) < (enemy.x + 110)) and ((bullet.y + 50) > enemy.y and bullet.y < (enemy.y + enemyHeights[enemy.imageNum])):
                     enemies.remove(enemy)
                     missiles.remove(bullet)
 
