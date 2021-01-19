@@ -55,12 +55,13 @@ def gameQuit():
     pygame.quit()
     quit()
 
-def plane(x, y, planeImage):
-    gameDisplay.blit(planeImage, (x, y))
+def draw(pos, image):
+    gameDisplay.blit(image, pos)
 
 # define planes and projectiles
 
 enemyPlanes = [pygame.image.load("Python with AI - Level 2/pygame/planeGame/L1.png"), pygame.image.load("Python with AI - Level 2/pygame/planeGame/L2.png"), pygame.image.load("Python with AI - Level 2/pygame/planeGame/L3.png"), pygame.image.load("Python with AI - Level 2/pygame/planeGame/L4.png")]
+enemyHeights = [78, 65, 58, 49]
 missile = pygame.image.load("Python with AI - Level 2/pygame/planeGame/misslle.png")
 bomb = pygame.image.load("Python with AI - Level 2/pygame/planeGame/B1.png")
 player = pygame.image.load("Python with AI - Level 2/pygame/planeGame/RFA Fighter.png")
@@ -68,7 +69,7 @@ player = pygame.image.load("Python with AI - Level 2/pygame/planeGame/RFA Fighte
 # define enemy class
 
 class Enemy:
-    def __init__(self, x, y, imageNum, shot, respawnWait, x_change, y_change):
+    def __init__(self, x, y, imageNum, shot, respawnWait, shootWait, x_change, y_change, xMovement, xMovementTime, yMovement, yMovementTime, speed):
         self.x = x
         self.y = y
         self.shot = shot
@@ -76,10 +77,56 @@ class Enemy:
         self.respawnWait = respawnWait
         self.x_change = x_change
         self.y_change = y_change
+        self.xMovement = xMovement
+        self.xMovementTime = xMovementTime
+        self.yMovement = yMovement
+        self.yMovementTime = yMovementTime
+        self.speed = speed
+        self.shootWait = shootWait
     def move(self):
         self.x += self.x_change
         self.y += self.y_change
-        return (x, y)
+        return (self.x, self.y)
+    def calculate(self):
+        self.yMovementTime += 1
+        if self.yMovementTime == 21:
+            self.yMovement = self.yMovement * -1
+            self.yMovementTime = 0
+        self.y_change = self.speed * self.yMovement
+        self.xMovementTime += 1
+        if self.xMovementTime == 41:
+            self.xMovement = self.xMovement * -1
+            self.xMovementTime = 0
+        self.x_change = self.speed * self.xMovement
+        self.shootWait += -1
+    def spawnBomb(self):
+        bombs.append(Bomb(self.x + 220, self.y + 200, 5))
+
+# define bomb class
+
+class Bomb:
+    def __init__(self, x, y, speed):
+        self.x = x
+        self.y = y
+        self.speed = speed
+    def move(self):
+        self.y += self.speed
+        return (self.x, self.y)
+
+# define missile class
+
+class Missile:
+    def __init__(self, x, y, direction, speed, x_change):
+        self.x = x
+        self.y = y
+        self.direction = direction
+        self.speed = speed
+        self.x_change = x_change
+    def move(self):
+        self.x_change += self.speed * self.direction
+        self.y += 0 - self.speed
+        return (self.x + self.x_change, self.y)
+
 
 while True:
 
@@ -92,6 +139,11 @@ while True:
     x = 740
     y_change = 0
     y = 720
+    enemies = [Enemy(100, 100, 2, False, 0, 1, 0, 0, 1, 0, 1, 0, 1)]
+    bombs = []
+    missiles = []
+    shooting = False
+    shootDelay = 5
 
     # menu code
 
@@ -117,6 +169,8 @@ while True:
     pygame.mixer.music.set_volume(volume / 100)
 
     while not dead:
+        # events code
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 gameQuit()
@@ -129,16 +183,65 @@ while True:
                     y_change = -5
                 elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     y_change = 5
+                elif event.key == pygame.K_SPACE:
+                    shooting = True
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_a or event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                     x_change = 0
                 elif event.key == pygame.K_DOWN or event.key == pygame.K_s or event.key == pygame.K_UP or event.key == pygame.K_w:
                     y_change = 0
+                elif event.key == pygame.K_SPACE:
+                    shooting = False
+
+        # movement code
 
         x += x_change
         y += y_change
 
-        plane(x, y, player)
+        # missile management
+
+        if shootDelay > 0:
+            shootDelay += -1
+        if shooting and shootDelay == 0:
+            missiles.append(Missile(x, y - 76, x_change / 5, 5, 2))
+            shootDelay = 10
+        for bullet in missiles:
+            if bullet.y > 980:
+                missiles.remove(bullet)
+            draw(bullet.move(), missile)
+
+        # Collision detection
+
+        if y < 400 or y + 160 > 980 or x < 0 or x + 110 > 1820:
+            die()
+            dead = True
+
+        for mine in bombs:
+            if ((mine.x + 50) > x and mine.x < (x + 440)) and ((mine.y + 50) > y and mine.y < (y + 160)):
+                die()
+                dead = True
+
+        for bullet in missiles:
+            for enemy in enemies:
+                if ((bullet.x + 50) > enemy.x and bullet.x < (enemy.x + 110)) and ((bullet.y + 50) > enemy.y and bullet.y < (enemy.y + enemyHeights[enemy.imageNum])):
+                    enemies.remove(enemy)
+                    missiles.remove(bullet)
+
+        # Enemy code
+
+        for enemy in enemies:
+            enemy.calculate()
+            draw(enemy.move(), enemyPlanes[enemy.imageNum])
+            if enemy.shootWait == 0:
+                enemy.spawnBomb()
+                enemy.shootWait = 360
+
+        for mine in bombs:
+            if mine.move()[1] > 980:
+                bombs.remove(mine)
+            draw(mine.move(), bomb)
+
+        draw((x, y), player)
         
         frameUpdate()
         
