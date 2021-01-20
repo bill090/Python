@@ -88,6 +88,13 @@ class Enemy:
         self.y += self.y_change
         return (int(self.x), int(self.y))
     def calculate(self):
+        if self.respawnWait == 0 and self.shot:
+            self.imageNum = random.randint(0, 3)
+            self.shot = False
+            self.x = random.randint(0, 1820)
+            self.shootWait = 60
+        if self.shot:
+            self.respawnWait += -1
         self.yMovementTime += 1
         if self.yMovementTime == 21:
             self.yMovement = self.yMovement * -1
@@ -100,7 +107,10 @@ class Enemy:
         self.x_change = self.speed * self.xMovement
         self.shootWait += -1
     def spawnBomb(self):
-        bombs.append(Bomb(self.x + 220, self.y + 200, 5))
+        bombs.append(Bomb(self.x + 30, self.y + 200, 5))
+    def die(self):
+        self.shot = True
+        self.respawnWait = 30
 
 # define bomb class
 
@@ -139,11 +149,14 @@ while True:
     x = 740
     y_change = 0
     y = 720
-    enemies = [Enemy(100, 100, 2, False, 0, 1, 0, 0, 1, 0, 1, 0, 1)]
+    enemies = [Enemy(100, 100, 2, False, 0, 1, 0, 0, 1, 0, 1, 0, 1), Enemy(300, 100, 2, False, 0, 1, 0, 0, 1, 0, 1, 0, 1), Enemy(500, 100, 2, False, 0, 1, 0, 0, 1, 0, 1, 0, 1), Enemy(900, 100, 2, False, 0, 1, 0, 0, 1, 0, 1, 0, 1), Enemy(1100, 100, 2, False, 0, 1, 0, 0, 1, 0, 1, 0, 1), Enemy(1300, 100, 2, False, 0, 1, 0, 0, 1, 0, 1, 0, 1), Enemy(1500, 100, 2, False, 0, 1, 0, 0, 1, 0, 1, 0, 1), Enemy(1700, 100, 2, False, 0, 1, 0, 0, 1, 0, 1, 0, 1)]
     bombs = []
     missiles = []
     shooting = False
     shootDelay = 5
+    shootingDelay = 0
+    maxShoot = 5
+    canShoot = True
 
     # menu code
 
@@ -183,8 +196,11 @@ while True:
                     y_change = -5
                 elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     y_change = 5
-                elif event.key == pygame.K_SPACE:
+                elif event.key == pygame.K_SPACE and canShoot:
                     shooting = True
+                    maxShoot = 5
+                    shootingDelay = 60
+                    canShoot = False
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_a or event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                     x_change = 0
@@ -202,11 +218,19 @@ while True:
 
         # missile management
 
+        if shootingDelay > 0 and not(shooting):
+            shootingDelay += -1
+        if shootingDelay == 0:
+            maxShoot = 5
+            canShoot = True
         if shootDelay > 0:
             shootDelay += -1
-        if shooting and shootDelay == 0:
+        if shooting and shootDelay == 0 and maxShoot != 0:
             missiles.append(Missile(x + 42, y - 76, x_change / 5, 10, 1))
             shootDelay = 10
+            maxShoot += -1
+        if maxShoot == 0:
+            shooting = False
         for bullet in missiles:
             if bullet.y > 980 or bullet.x > 1820 or bullet.x < 0:
                 missiles.remove(bullet)
@@ -219,21 +243,21 @@ while True:
             dead = True
 
         for mine in bombs:
-            if ((mine.x + 50) > x and mine.x < (x + 440)) and ((mine.y + 50) > y and mine.y < (y + 160)):
+            if ((mine.x + 50) > x and mine.x < (x + 110)) and ((mine.y + 50) > y and mine.y < (y + 160)):
                 die()
                 dead = True
 
         for bullet in missiles:
             for enemy in enemies:
                 if ((bullet.x + bullet.x_change + 50) > enemy.x and (bullet.x + bullet.x_change) < (enemy.x + 110)) and ((bullet.y + 50) > enemy.y and bullet.y < (enemy.y + enemyHeights[enemy.imageNum])):
-                    enemies.remove(enemy)
-                    missiles.remove(bullet)
+                    enemy.die()
 
         # Enemy code
 
         for enemy in enemies:
             enemy.calculate()
-            draw(enemy.move(), enemyPlanes[enemy.imageNum])
+            if not(enemy.shot):
+                draw(enemy.move(), enemyPlanes[enemy.imageNum])
             if enemy.shootWait == 0:
                 enemy.spawnBomb()
                 enemy.shootWait = 360
