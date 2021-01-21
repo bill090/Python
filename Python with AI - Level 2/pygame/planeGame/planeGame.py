@@ -251,6 +251,11 @@ while True:
             for enemy in enemies:
                 if ((bullet.x + bullet.x_change + 50) > enemy.x and (bullet.x + bullet.x_change) < (enemy.x + 110)) and ((bullet.y + 50) > enemy.y and bullet.y < (enemy.y + enemyHeights[enemy.imageNum])):
                     enemy.die()
+                    missiles.remove(bullet)
+            if mine in bombs:
+                if ((mine.x + 50) > bullet.x and mine.x < (bullet.x + 25)) and ((mine.y + 50) > bullet.y and mine.y < (bullet.y + 74)):
+                    bombs.remove(mine)
+                    missiles.remove(bullet)
 
         # Enemy code
 
