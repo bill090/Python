@@ -178,6 +178,8 @@ while True:
     maxShoot = 5
     canShoot = True
     lives = 5
+    invincibility = False
+    invincibilityFrames = 0
 
     # menu code
 
@@ -268,7 +270,10 @@ while True:
 
         for mine in bombs:
             if ((mine.x + 10) > x and mine.x < (x + 110)) and ((mine.y + 30) > y and mine.y < (y + 160)):
-                lives += -1
+                if not(invincibility):
+                    lives += -1
+                    invincibility = True
+                    invincibilityFrames = 60
                 bombs.remove(mine)
 
         for bullet in missiles:
@@ -297,7 +302,14 @@ while True:
                 bombs.remove(mine)
             draw(mine.move(), bomb)
 
-        draw((x, y), player)
+        # player management
+
+        if invincibility:
+            invincibilityFrames += -1
+        if invincibilityFrames % 2 == 0 or not(invincibility):
+            draw((x, y), player)
+        if invincibilityFrames == 0:
+            invincibility = False
         
         frameUpdate()
         
