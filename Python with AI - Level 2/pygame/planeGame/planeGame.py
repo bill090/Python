@@ -60,16 +60,16 @@ def draw(pos, image):
 
 # define planes and projectiles
 
-enemyPlanes = [pygame.image.load("Python with AI - Level 2/pygame/planeGame/L1.png"), pygame.image.load("Python with AI - Level 2/pygame/planeGame/L2.png"), pygame.image.load("Python with AI - Level 2/pygame/planeGame/L3.png"), pygame.image.load("Python with AI - Level 2/pygame/planeGame/L4.png")]
-enemyHeights = [78, 65, 58, 49]
+enemyPlanes = [pygame.image.load("Python with AI - Level 2/pygame/planeGame/L1.png"), pygame.image.load("Python with AI - Level 2/pygame/planeGame/L2.png"), pygame.image.load("Python with AI - Level 2/pygame/planeGame/L3.png"), pygame.image.load("Python with AI - Level 2/pygame/planeGame/L4.png"), pygame.image.load("Python with AI - Level 2/pygame/planeGame/L6.png")]
+enemyHeights = [78, 65, 58, 49, 82]
 missile = pygame.image.load("Python with AI - Level 2/pygame/planeGame/misslle.png")
 bomb = pygame.image.load("Python with AI - Level 2/pygame/planeGame/B1.png")
-player = pygame.image.load("Python with AI - Level 2/pygame/planeGame/RFA Fighter.png")
+player = pygame.image.load("Python with AI - Level 2/pygame/planeGame/L5.png")
 
 # define enemy class
 
 class Enemy:
-    def __init__(self, x, y, imageNum, shot, respawnWait, shootWait, x_change, y_change, xMovement, xMovementTime, xMovementTimeMax, yMovement, yMovementTime, yMovementTimeMax, speed):
+    def __init__(self, x, y, imageNum, shot, respawnWait, shootWait, x_change, y_change, xMovement, xMovementTime, xMovementTimeMax, yMovement, yMovementTime, yMovementTimeMax, speed, spawning, spawnAnimationTime, spawnSpeed):
         self.x = x
         self.y = y
         self.shot = shot
@@ -85,33 +85,47 @@ class Enemy:
         self.yMovementTimeMax = yMovementTimeMax
         self.speed = speed
         self.shootWait = shootWait
+        self.spawning = spawning
+        self.spawnAnimationTime = spawnAnimationTime
+        self.spawnSpeed = spawnSpeed
     def move(self):
         self.x += self.x_change
         self.y += self.y_change
         return (int(self.x), int(self.y))
     def calculate(self):
-        if self.respawnWait == 0 and self.shot:
-            self.imageNum = random.randint(0, 3)
-            self.shot = False
-            self.x = random.randint(0, 1820)
-            self.shootWait = 60
-        if self.shot:
-            self.respawnWait += -1
-        self.yMovementTime += 1
-        if self.yMovementTime == self.yMovementTimeMax:
-            self.yMovement = self.yMovement * -1
-            self.yMovementTime = 0
-            self.yMovementTimeMax = random.randint(21, 41)
-        self.y_change = self.speed * self.yMovement
-        self.xMovementTime += 1
-        if self.xMovementTime == self.xMovementTimeMax:
-            self.xMovement = self.xMovement * -1
-            self.xMovementTime = 0
-            self.xMovementTimeMax = random.randint(41, 61)
-        self.x_change = self.speed * self.xMovement
-        self.shootWait += -1
+        if self.spawning:
+            self.y += self.spawnSpeed
+            self.spawnAnimationTime += -1
+            if self.spawnAnimationTime == 0:
+                self.spawning = False
+            if self.spawnAnimationTime % 10 == 0:
+                self.spawnSpeed += -1
+        else:
+            if self.respawnWait == 0 and self.shot:
+                self.shot = False
+                self.x = random.randint(0, 1710)
+                self.shootWait = 60
+                self.y = -100
+                self.spawning = True
+                self.spawnAnimationTime = 50
+                self.spawnSpeed = 5
+            if self.shot:
+                self.respawnWait += -1
+            self.yMovementTime += 1
+            if self.yMovementTime == self.yMovementTimeMax:
+                self.yMovement = self.yMovement * -1
+                self.yMovementTime = 0
+                self.yMovementTimeMax = random.randint(21, 41)
+            self.y_change = self.speed * self.yMovement
+            self.xMovementTime += 1
+            if self.xMovementTime == self.xMovementTimeMax:
+                self.xMovement = self.xMovement * -1
+                self.xMovementTime = 0
+                self.xMovementTimeMax = random.randint(41, 61)
+            self.x_change = self.speed * self.xMovement
+            self.shootWait += -1
     def spawnBomb(self):
-        bombs.append(Bomb(self.x + 30, self.y + 200, 5))
+        bombs.append(Bomb(self.x + 30, self.y + enemyHeights[self.imageNum], 5))
     def die(self):
         self.shot = True
         self.respawnWait = 30
@@ -153,7 +167,7 @@ while True:
     x = 740
     y_change = 0
     y = 720
-    enemies = [Enemy(1700, 100, 2, False, 0, 1, 0, 0, 1, 0, random.randint(21, 41), 1, 0, random.randint(21, 41), 1)]
+    enemies = [Enemy(1700, -100, 4, False, 0, 1, 0, 0, 1, 0, random.randint(21, 41), 1, 0, random.randint(21, 41), 1, True, 50, 5)]
     bombs = []
     missiles = []
     shooting = False
@@ -161,6 +175,7 @@ while True:
     shootingDelay = 0
     maxShoot = 5
     canShoot = True
+    lives = 5
 
     # menu code
 
@@ -188,6 +203,9 @@ while True:
     while not dead:
         # events code
 
+        if lives == 0:
+            die()
+            dead = True
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 gameQuit()
@@ -230,7 +248,7 @@ while True:
         if shootDelay > 0:
             shootDelay += -1
         if shooting and shootDelay == 0 and maxShoot != 0:
-            missiles.append(Missile(x + 42, y - 76, x_change / 5, 10, 1))
+            missiles.append(Missile(x + 42, y - 30, x_change / 5, 10, 1))
             shootDelay = 10
             maxShoot += -1
         if maxShoot == 0:
@@ -242,22 +260,23 @@ while True:
 
         # Collision detection
 
-        if y < 400 or y + 160 > 980 or x < 0 or x + 110 > 1820:
+        if y < 400 or y + 81 > 980 or x < 0 or x + 110 > 1820:
             die()
             dead = True
 
         for mine in bombs:
-            if ((mine.x + 50) > x and mine.x < (x + 110)) and ((mine.y + 50) > y and mine.y < (y + 160)):
-                die()
-                dead = True
+            if ((mine.x + 10) > x and mine.x < (x + 110)) and ((mine.y + 30) > y and mine.y < (y + 160)):
+                lives += -1
+                bombs.remove(mine)
 
         for bullet in missiles:
             for enemy in enemies:
-                if ((bullet.x + bullet.x_change + 50) > enemy.x and (bullet.x + bullet.x_change) < (enemy.x + 110)) and ((bullet.y + 50) > enemy.y and bullet.y < (enemy.y + enemyHeights[enemy.imageNum])) and not(enemy.shot):
+                if ((bullet.x + bullet.x_change + 50) > enemy.x and (bullet.x + bullet.x_change) < (enemy.x + 110)) and ((bullet.y + 50) > enemy.y and bullet.y < (enemy.y + enemyHeights[enemy.imageNum])) and not(enemy.shot) and bullet in missiles:
                     enemy.die()
+                    enemies.append(Enemy(random.randint(0, 1710), -100, 4, False, 0, 1, 0, 0, 1, 0, random.randint(21, 41), 1, 0, random.randint(21, 41), 1, True, 50, 5))
                     missiles.remove(bullet)
             if mine in bombs and bullet in missiles:
-                if ((mine.x + 50) > bullet.x and mine.x < (bullet.x + 25)) and ((mine.y + 50) > bullet.y and mine.y < (bullet.y + 74)):
+                if ((mine.x + 50) > bullet.x and mine.x < (bullet.x + 10)) and ((mine.y + 50) > bullet.y and mine.y < (bullet.y + 30)):
                     bombs.remove(mine)
                     missiles.remove(bullet)
 
