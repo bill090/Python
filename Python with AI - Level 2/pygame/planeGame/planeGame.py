@@ -60,6 +60,8 @@ def draw(pos, image):
 
 # define planes and projectiles
 
+# Credit to @_ryan_#6862 for image 4 and player image
+
 enemyPlanes = [pygame.image.load("Python with AI - Level 2/pygame/planeGame/L1.png"), pygame.image.load("Python with AI - Level 2/pygame/planeGame/L2.png"), pygame.image.load("Python with AI - Level 2/pygame/planeGame/L3.png"), pygame.image.load("Python with AI - Level 2/pygame/planeGame/L4.png"), pygame.image.load("Python with AI - Level 2/pygame/planeGame/L6.png")]
 enemyHeights = [78, 65, 58, 49, 82]
 missile = pygame.image.load("Python with AI - Level 2/pygame/planeGame/misslle.png")
@@ -286,9 +288,9 @@ while True:
             enemy.calculate()
             if not(enemy.shot):
                 draw(enemy.move(), enemyPlanes[enemy.imageNum])
-            if enemy.shootWait == 0:
-                enemy.spawnBomb()
-                enemy.shootWait = 360
+                if enemy.shootWait == 0:
+                    enemy.spawnBomb()
+                    enemy.shootWait = 360
 
         for mine in bombs:
             if mine.move()[1] > 980:
