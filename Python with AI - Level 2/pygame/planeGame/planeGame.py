@@ -7,9 +7,11 @@ import pygame, time, random
 pygame.mixer.pre_init()
 pygame.init()
 
-# define needed variables an other pygame stuff
+# define needed variables and other pygame stuff
 
-gameDisplay = pygame.display.set_mode((1820, 980))
+screenWidth = 1820
+screenHeight = 980
+gameDisplay = pygame.display.set_mode((screenWidth, screenHeight))
 clock = pygame.time.Clock()
 pygame.display.set_caption('Plane Fighting')
 
@@ -30,7 +32,7 @@ def displayMsg(msg, pos, fontSize):
     gameDisplay.blit(TextSurf, TextRect)
 
 def die():
-    displayMsg("You died", (int(1820 / 2), int(980 / 2)), 115)
+    displayMsg("You died", (int(screenWidth / 2), int(screenHeight / 2)), 115)
     frameUpdate()
     time.sleep(3)
 
@@ -67,6 +69,7 @@ enemyHeights = [78, 65, 58, 49, 82]
 missile = pygame.image.load("Python with AI - Level 2/pygame/planeGame/misslle.png")
 bomb = pygame.image.load("Python with AI - Level 2/pygame/planeGame/B1.png")
 player = pygame.image.load("Python with AI - Level 2/pygame/planeGame/L5.png")
+cloudImage = pygame.image.load("Python with AI - Level 2/pygame/planeGame/Cloud.png")
 
 # define enemy class
 
@@ -146,17 +149,67 @@ class Bomb:
 # define missile class
 
 class Missile:
-    def __init__(self, x, y, direction, speed, x_change):
+    def __init__(self, x, y, direction, xSpeed, ySpeed, x_change):
         self.x = x
         self.y = y
         self.direction = direction
-        self.speed = speed
+        self.xSpeed = xSpeed
+        self.ySpeed = ySpeed
         self.x_change = x_change
     def move(self):
-        self.x_change += self.speed * self.direction
-        self.y += 0 - self.speed
+        self.x_change += self.xSpeed * self.direction
+        self.y += 0 - self.ySpeed
         return (int(self.x + self.x_change), int(self.y))
 
+# define cloud class
+
+class Cloud:
+    def __init__(self, x, y, x_change, y_change, xMovement, yMovement, xMovementTimeMax, yMovementTimeMax, xMovementTime, yMovementTime, speed):
+        self.x = x
+        self.y = y
+        self.x_change = x_change
+        self.y_change = y_change
+        self.xMovement = xMovement
+        self.yMovement = yMovement
+        self.xMovementTimeMax = xMovementTimeMax
+        self.yMovementTimeMax = yMovementTimeMax
+        self.xMovementTime = xMovementTime
+        self.yMovementTime = yMovementTime
+        self.speed = speed
+    def calculate(self):
+        self.yMovementTime += 1
+        if self.yMovementTime == self.yMovementTimeMax:
+            self.yMovement = self.yMovement * -1
+            self.yMovementTime = 0
+            self.yMovementTimeMax = random.randint(21, 41)
+        self.y_change = self.speed * self.yMovement
+        self.xMovementTime += 1
+        if self.xMovementTime == self.xMovementTimeMax:
+            self.xMovement = self.xMovement * -1
+            self.xMovementTime = 0
+            self.xMovementTimeMax = random.randint(21, 41)
+        self.x_change = self.speed * self.xMovement
+    def move(self):
+        self.x += self.x_change
+        self.y += self.y_change
+        return((self.x, self.y))
+    def reset(self):
+        self.x = random.randint(0, screenWidth - 100)
+        self.y = random.randint(0, screenHeight - 100)
+        self.xMovement = 1
+        self.yMovement = 1
+        self.xMovementTimeMax = random.randint(41, 81)
+        self.yMovementTimeMax = random.randint(41, 81)
+        self.xMovementTime = 0
+        self.yMovementTime = 0
+
+# define other variables
+
+clouds = []
+for x in range(0, 15):
+    clouds.append(Cloud(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1))
+for cloud in clouds:
+    cloud.reset()
 
 while True:
 
@@ -180,18 +233,20 @@ while True:
     lives = 5
     invincibility = False
     invincibilityFrames = 0
+    for cloud in clouds:
+        cloud.reset()
 
     # menu code
 
     while not menuEnd:
-        displayMsg("Plane Fighting", (int(1920 / 2), int(980 / 2)), 115)
-        displayMsg("press space to start and q to quit. or the buttons", (int(1920/2), int(980/2) + 100), 20)
+        displayMsg("Plane Fighting", (int(1920 / 2), int(screenHeight / 2)), 115)
+        displayMsg("press space to start and q to quit. or the buttons", (int(1920/2), int(screenHeight/2) + 100), 20)
         button((255, 40, 0), (255, 0, 0), 1120, 780, 100, 100, "Quit?", 20)
         button((0, 255, 0), (90, 238, 90), 600, 780, 100, 100, "START?", 20)
         button((255, 255, 255), (100, 100, 100), 390, 780, 200, 100, "Change Volume?", 20)
         button((255, 255, 255), (255, 255, 255), 200, 100, 1, 1, f"Volume: {str(volume)}%", 20)
         for event in pygame.event.get():
-            if (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE) or (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 600 and event.pos[0] < 700 and event.pos[1] > 780 and event.pos[1] < 980 and event.button == 1):
+            if (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE) or (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 600 and event.pos[0] < 700 and event.pos[1] > 780 and event.pos[1] < screenHeight and event.button == 1):
                 menuEnd = True
             if (event.type == pygame.KEYDOWN and event.key == pygame.K_q) or (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 1120 and event.pos[0] < 1220 and event.pos[1] > 780 and event.pos[1] < 880 and event.button == 1) or event.type == pygame.QUIT:
                 gameQuit()
@@ -242,6 +297,12 @@ while True:
         x = int(x)
         y = int(y)
 
+        # cloud management
+
+        for cloud in clouds:
+            cloud.calculate()
+            draw(cloud.move(), cloudImage)
+
         # missile management
 
         if shootingDelay > 0 and not(shooting):
@@ -252,19 +313,19 @@ while True:
         if shootDelay > 0:
             shootDelay += -1
         if shooting and shootDelay == 0 and maxShoot != 0:
-            missiles.append(Missile(x + 42, y - 30, x_change / 5, 10, 1))
+            missiles.append(Missile(x + 42, y - 30, x_change / 5, 5, 10, 1))
             shootDelay = 10
             maxShoot += -1
         if maxShoot == 0:
             shooting = False
         for bullet in missiles:
-            if bullet.y > 980 or bullet.x > 1820 or bullet.x < 0:
+            if bullet.y > screenHeight or bullet.x > screenWidth or bullet.x < 0:
                 missiles.remove(bullet)
             draw(bullet.move(), missile)
 
         # Collision detection
 
-        if y < 400 or y + 81 > 980 or x < 0 or x + 110 > 1820:
+        if y < 400 or y + 81 > screenHeight or x < 0 or x + 110 > screenWidth:
             die()
             dead = True
 
@@ -282,10 +343,11 @@ while True:
                     enemy.die()
                     enemies.append(Enemy(random.randint(0, 1710), -100, 4, False, 0, 1, 0, 0, 1, 0, random.randint(21, 41), 1, 0, random.randint(21, 41), 1, True, 50, 5))
                     missiles.remove(bullet)
-            if mine in bombs and bullet in missiles:
-                if ((mine.x + 50) > bullet.x and mine.x < (bullet.x + 10)) and ((mine.y + 50) > bullet.y and mine.y < (bullet.y + 30)):
-                    bombs.remove(mine)
-                    missiles.remove(bullet)
+            for mine in bombs:
+                if mine in bombs and bullet in missiles:
+                    if ((mine.x + 50) > bullet.x and mine.x < (bullet.x + 10)) and ((mine.y + 50) > bullet.y and mine.y < (bullet.y + 30)):
+                        bombs.remove(mine)
+                        missiles.remove(bullet)
 
         # Enemy code
 
@@ -298,7 +360,7 @@ while True:
                     enemy.shootWait = 360
 
         for mine in bombs:
-            if mine.move()[1] > 980:
+            if mine.move()[1] > screenHeight:
                 bombs.remove(mine)
             draw(mine.move(), bomb)
 

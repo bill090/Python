@@ -4,7 +4,9 @@ import random
 pygame.mixer.pre_init()
 pygame.init()
 pygame.mixer.music.set_volume(1)
-gameDisplay = pygame.display.set_mode((1820, 980))
+screenWidth = 1820
+screenHeight = 980
+gameDisplay = pygame.display.set_mode((screenWidth, screenHeight))
 clock = pygame.time.Clock()
 fireBallImg = pygame.image.load('Python with AI - Level 2/pygame/carGame/fireBall.png')
 carImg = pygame.image.load('Python with AI - Level 2/pygame/carGame/car.png')
@@ -20,7 +22,7 @@ def text_objects(text, font):
     return textSurface, textSurface.get_rect()
 
 def chrash():
-    displayMsg("You died", (int(1820 / 2), int(980 / 2)), 115)
+    displayMsg("You died", (int(screenWidth / 2), int(screenHeight / 2)), 115)
     frameUpdate()
     pygame.mixer.music.load("Python with AI - Level 2/pygame/carGame/Explosion+1.wav")
     pygame.mixer.music.play()
@@ -114,7 +116,7 @@ while True:
     chrashed = False
     x_change = 0
     x = 400
-    y = 980 - 166
+    y = screenHeight - 166
     zaWarudoMaxTime = 600
     zaWarudoTime = 600
     zaWarudoEffect = False
@@ -125,14 +127,14 @@ while True:
     # This is the start menu
 
     while not menuEnd:
-        displayMsg("Box Dodging", (int(1920 / 2), int(980 / 2)), 115)
-        displayMsg("press space to start and q to quit. or the buttons", (int(1920/2), int(980/2) + 100), 20)
+        displayMsg("Box Dodging", (int(1920 / 2), int(screenHeight / 2)), 115)
+        displayMsg("press space to start and q to quit. or the buttons", (int(1920/2), int(screenHeight/2) + 100), 20)
         button((255, 40, 0), (255, 0, 0), 1120, 780, 100, 100, "Quit?")
         button((0, 255, 0), (90, 238, 90), 600, 780, 100, 100, "START?")
         button((255, 255, 255), (100, 100, 100), 390, 780, 200, 100, "Change Volume?")
         button((255, 255, 255), (255, 255, 255), 200, 100, 1, 1, f"Volume: {str(volume)}%")
         for event in pygame.event.get():
-            if (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE) or (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 600 and event.pos[0] < 700 and event.pos[1] > 780 and event.pos[1] < 980 and event.button == 1):
+            if (event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE) or (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 600 and event.pos[0] < 700 and event.pos[1] > 780 and event.pos[1] < screenHeight and event.button == 1):
                 menuEnd = True
             if (event.type == pygame.KEYDOWN and event.key == pygame.K_q) or (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 1120 and event.pos[0] < 1220 and event.pos[1] > 780 and event.pos[1] < 880 and event.button == 1) or event.type == pygame.QUIT:
                 gameQuit()
@@ -159,14 +161,14 @@ while True:
         gameDisplay.fill((255, 255, 255, 0))
         if not AfterMenu:
             for event in pygame.event.get():
-                if (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 1020 and event.pos[0] < 1220 and event.pos[1] > 780 and event.pos[1] < 980 and event.button == 1):
+                if (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 1020 and event.pos[0] < 1220 and event.pos[1] > 780 and event.pos[1] < screenHeight and event.button == 1):
                     unlimitedFireBalls = False
                     startChoiceEnd = True
-                if (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 500 and event.pos[0] < 700 and event.pos[1] > 780 and event.pos[1] < 980 and event.button == 1):
+                if (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 500 and event.pos[0] < 700 and event.pos[1] > 780 and event.pos[1] < screenHeight and event.button == 1):
                     fireBallsLeft = "infinity"
                     unlimitedFireBalls = True
                     startChoiceEnd = True
-                if (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 810 and event.pos[0] < 910 and event.pos[1] > 780 and event.pos[1] < 980 and event.button == 1):
+                if (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 810 and event.pos[0] < 910 and event.pos[1] > 780 and event.pos[1] < screenHeight and event.button == 1):
                     resetting = True
                     startChoiceEnd = True
                 if (event.type == pygame.MOUSEBUTTONDOWN and event.pos[0] > 1270 and event.pos[0] < 1350 and event.pos[1] > 780 and event.pos[1] < 825 and event.button == 1):
@@ -225,7 +227,7 @@ while True:
                 if event.key == pygame.K_LSHIFT and not(fireBallLaunched) and ((not(unlimitedFireBalls) and fireBallsLeft > 0) or (unlimitedFireBalls and fireBallCoolDown == 0)):
                     fireBall(x, y - 148)
                     fireBallX = x
-                    fireBallY = 980 - 166 - 148
+                    fireBallY = screenHeight - 166 - 148
                     fireBallLaunched = True
                     fireBallCoolDown = fireBallCoolDownTime
                     if not(unlimitedFireBalls):
@@ -239,7 +241,7 @@ while True:
 
         # This area handles collision
 
-        if x > 1820 - 76 or x < 0:
+        if x > screenWidth - 76 or x < 0:
             if not zaWarudoEffect:
                 chrash()
                 chrashed = True
@@ -294,7 +296,7 @@ while True:
             
         # This area handles the enemy spawning.
 
-        if thingA_starty < 980 and not(Ahit):
+        if thingA_starty < screenHeight and not(Ahit):
             car(thingA_startx, thingA_starty, Acar)
         elif (Await == 0 and Aresetted) or Ahit:
             if not(Ahit):
@@ -318,7 +320,7 @@ while True:
         else:
             Aresetted = True
             Await  = random.randint(0, 120)
-        if thingB_starty < 980 and not(Bhit):
+        if thingB_starty < screenHeight and not(Bhit):
             car(thingB_startx, thingB_starty, Bcar)
         elif (Bwait == 0 and Bresetted) or Bhit:
             
