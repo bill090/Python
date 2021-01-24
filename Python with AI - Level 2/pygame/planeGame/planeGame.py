@@ -325,7 +325,7 @@ while True:
 
         # Collision detection
 
-        if y < 400 or y + 81 > screenHeight or x < 0 or x + 110 > screenWidth:
+        if y < 0 or y + 81 > screenHeight or x < 0 or x + 110 > screenWidth:
             die()
             dead = True
 
@@ -348,6 +348,13 @@ while True:
                     if ((mine.x + 50) > bullet.x and mine.x < (bullet.x + 10)) and ((mine.y + 50) > bullet.y and mine.y < (bullet.y + 30)):
                         bombs.remove(mine)
                         missiles.remove(bullet)
+
+        for enemy in enemies:
+            if ((x + 110 > enemy.x and x < (enemy.x + 110)) and ((y + 160) > enemy.y and y < (enemy.y + enemyHeights[enemy.imageNum])) and not(enemy.shot)):
+                x += 0 - x_change
+                y += 0 - y_change
+                die()
+                dead = True
 
         # Enemy code
 
