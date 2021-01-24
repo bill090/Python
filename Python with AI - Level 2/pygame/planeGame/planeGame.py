@@ -351,8 +351,6 @@ while True:
 
         for enemy in enemies:
             if ((x + 110 > enemy.x and x < (enemy.x + 110)) and ((y + 160) > enemy.y and y < (enemy.y + enemyHeights[enemy.imageNum])) and not(enemy.shot)):
-                x += 0 - x_change
-                y += 0 - y_change
                 die()
                 dead = True
 
