@@ -64,21 +64,20 @@ def draw(pos, image):
 
 # Credit to @_ryan_#6862 for image 4 and player image
 
-enemyPlanes = [pygame.image.load("Python with AI - Level 2/pygame/planeGame/L1.png"), pygame.image.load("Python with AI - Level 2/pygame/planeGame/L2.png"), pygame.image.load("Python with AI - Level 2/pygame/planeGame/L3.png"), pygame.image.load("Python with AI - Level 2/pygame/planeGame/L4.png"), pygame.image.load("Python with AI - Level 2/pygame/planeGame/L6.png")]
-enemyHeights = [78, 65, 58, 49, 82]
+enemyPlane = pygame.image.load("Python with AI - Level 2/pygame/planeGame/Enemy.png")
+enemyHeight = 82
 missile = pygame.image.load("Python with AI - Level 2/pygame/planeGame/misslle.png")
 bomb = pygame.image.load("Python with AI - Level 2/pygame/planeGame/B1.png")
-player = pygame.image.load("Python with AI - Level 2/pygame/planeGame/L5.png")
+player = pygame.image.load("Python with AI - Level 2/pygame/planeGame/Player.png")
 cloudImage = pygame.image.load("Python with AI - Level 2/pygame/planeGame/Cloud.png")
 
 # define enemy class
 
 class Enemy:
-    def __init__(self, x, y, imageNum, shot, respawnWait, shootWait, x_change, y_change, xMovement, xMovementTime, xMovementTimeMax, yMovement, yMovementTime, yMovementTimeMax, speed, spawning, spawnAnimationTime, spawnSpeed):
+    def __init__(self, x, y, shot, respawnWait, shootWait, x_change, y_change, xMovement, xMovementTime, xMovementTimeMax, yMovement, yMovementTime, yMovementTimeMax, speed, spawning, spawnAnimationTime, spawnSpeed):
         self.x = x
         self.y = y
         self.shot = shot
-        self.imageNum = imageNum
         self.respawnWait = respawnWait
         self.x_change = x_change
         self.y_change = y_change
@@ -130,7 +129,7 @@ class Enemy:
             self.x_change = self.speed * self.xMovement
             self.shootWait += -1
     def spawnBomb(self):
-        bombs.append(Bomb(self.x + 30, self.y + enemyHeights[self.imageNum], 5))
+        bombs.append(Bomb(self.x + 30, self.y + enemyHeight, 5))
     def die(self):
         self.shot = True
         self.respawnWait = 30
@@ -222,7 +221,7 @@ while True:
     x = 740
     y_change = 0
     y = 720
-    enemies = [Enemy(1700, -100, 4, False, 0, 1, 0, 0, 1, 0, random.randint(21, 41), 1, 0, random.randint(21, 41), 1, True, 50, 5)]
+    enemies = [Enemy(1700, -100, False, 0, 1, 0, 0, 1, 0, random.randint(21, 41), 1, 0, random.randint(21, 41), 1, True, 50, 5)]
     bombs = []
     missiles = []
     shooting = False
@@ -339,9 +338,9 @@ while True:
 
         for bullet in missiles:
             for enemy in enemies:
-                if ((bullet.x + bullet.x_change + 50) > enemy.x and (bullet.x + bullet.x_change) < (enemy.x + 110)) and ((bullet.y + 50) > enemy.y and bullet.y < (enemy.y + enemyHeights[enemy.imageNum])) and not(enemy.shot) and bullet in missiles:
+                if ((bullet.x + bullet.x_change + 50) > enemy.x and (bullet.x + bullet.x_change) < (enemy.x + 110)) and ((bullet.y + 50) > enemy.y and bullet.y < (enemy.y + enemyHeight)) and not(enemy.shot) and bullet in missiles:
                     enemy.die()
-                    enemies.append(Enemy(random.randint(0, 1710), -100, 4, False, 0, 1, 0, 0, 1, 0, random.randint(21, 41), 1, 0, random.randint(21, 41), 1, True, 50, 5))
+                    enemies.append(Enemy(random.randint(0, 1710), -100, False, 0, 1, 0, 0, 1, 0, random.randint(21, 41), 1, 0, random.randint(21, 41), 1, True, 50, 5))
                     missiles.remove(bullet)
             for mine in bombs:
                 if mine in bombs and bullet in missiles:
@@ -350,7 +349,7 @@ while True:
                         missiles.remove(bullet)
 
         for enemy in enemies:
-            if ((x + 110 > enemy.x and x < (enemy.x + 110)) and ((y + 160) > enemy.y and y < (enemy.y + enemyHeights[enemy.imageNum])) and not(enemy.shot)):
+            if ((x + 110 > enemy.x and x < (enemy.x + 110)) and ((y + 160) > enemy.y and y < (enemy.y + enemyHeight)) and not(enemy.shot)): 
                 die()
                 dead = True
 
@@ -359,7 +358,7 @@ while True:
         for enemy in enemies:
             enemy.calculate()
             if not(enemy.shot):
-                draw(enemy.move(), enemyPlanes[enemy.imageNum])
+                draw(enemy.move(), enemyPlane)
                 if enemy.shootWait == 0:
                     enemy.spawnBomb()
                     enemy.shootWait = 360
