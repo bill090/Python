@@ -32,9 +32,18 @@ def displayMsg(msg, pos, fontSize):
     gameDisplay.blit(TextSurf, TextRect)
 
 def die():
+    exitingDeath = False
+    gameDisplay.fill((255, 255, 255, 0))
     displayMsg("You died", (int(screenWidth / 2), int(screenHeight / 2)), 115)
     frameUpdate()
-    time.sleep(3)
+    for x in range(0, 180):
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    exitingDeath = True
+        if exitingDeath:
+            break
+        frameUpdate()
 
 def playMus(musPath):
     pygame.mixer.music.load(musPath)
