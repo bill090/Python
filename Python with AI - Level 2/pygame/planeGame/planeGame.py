@@ -304,32 +304,17 @@ while True:
         y += y_change
         x = int(x)
         y = int(y)
-
-        # cloud management
-
-        for cloud in clouds:
-            cloud.calculate()
-            draw(cloud.move(), cloudImage)
-
-        # missile management
-
-        if shootingDelay > 0 and not(shooting):
-            shootingDelay += -1
-        if shootingDelay == 0:
-            maxShoot = 5
-            canShoot = True
-        if shootDelay > 0:
-            shootDelay += -1
-        if shooting and shootDelay == 0 and maxShoot != 0:
-            missiles.append(Missile(x + 42, y - 30, x_change / 5, 5, 10, 1))
-            shootDelay = 10
-            maxShoot += -1
-        if maxShoot == 0:
-            shooting = False
-        for bullet in missiles:
-            if bullet.y > screenHeight or bullet.x > screenWidth or bullet.x < 0:
-                missiles.remove(bullet)
-            draw(bullet.move(), missile)
+        
+        # health bar code:
+        things(10, 10, 10, 30, (255, 0, 0))
+        if lives > 1:
+            things(30, 10, 10, 30, (255, 165, 0))
+        if lives > 2:
+            things(50, 10, 10, 30, (255, 255, 0))
+        if lives > 3:
+            things(70, 10, 10, 30, (90, 238, 90))
+        if lives > 4:
+            things(90, 10, 10, 30, (0, 255, 0))
 
         # Collision detection
 
@@ -361,6 +346,32 @@ while True:
             if ((x + 110 > enemy.x and x < (enemy.x + 110)) and ((y + 160) > enemy.y and y < (enemy.y + enemyHeight)) and not(enemy.shot)): 
                 die()
                 dead = True
+
+        # cloud management
+
+        for cloud in clouds:
+            cloud.calculate()
+            draw(cloud.move(), cloudImage)
+
+        # missile management
+
+        if shootingDelay > 0 and not(shooting):
+            shootingDelay += -1
+        if shootingDelay == 0:
+            maxShoot = 5
+            canShoot = True
+        if shootDelay > 0:
+            shootDelay += -1
+        if shooting and shootDelay == 0 and maxShoot != 0:
+            missiles.append(Missile(x + 42, y - 30, x_change / 5, 5, 10, 1))
+            shootDelay = 10
+            maxShoot += -1
+        if maxShoot == 0:
+            shooting = False
+        for bullet in missiles:
+            if bullet.y > screenHeight or bullet.x > screenWidth or bullet.x < 0:
+                missiles.remove(bullet)
+            draw(bullet.move(), missile)
 
         # Enemy code
 
