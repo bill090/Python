@@ -10,7 +10,7 @@ gameDisplay = pygame.display.set_mode((screenWidth, screenHeight))
 clock = pygame.time.Clock()
 fireBallImg = pygame.image.load('Python with AI - Level 2/pygame/carGame/fireBall.png')
 carImg = pygame.image.load('Python with AI - Level 2/pygame/carGame/car.png')
-pygame.display.set_caption('Box Dodging')
+pygame.display.set_caption('Car Dodging')
 enemyCars = [pygame.image.load('Python with AI - Level 2/pygame/carGame/car4.png'), pygame.image.load('Python with AI - Level 2/pygame/carGame/car2.png'), pygame.image.load('Python with AI - Level 2/pygame/carGame/car3.png')]
 enemyCarsWidths = [76, 76, 96]
 enemyCarsHeights = [166, 171, 201]
@@ -127,7 +127,7 @@ while True:
     # This is the start menu
 
     while not menuEnd:
-        displayMsg("Box Dodging", (int(1920 / 2), int(screenHeight / 2)), 115)
+        displayMsg("Car Dodging", (int(1920 / 2), int(screenHeight / 2)), 115)
         displayMsg("press space to start and q to quit. or the buttons", (int(1920/2), int(screenHeight/2) + 100), 20)
         button((255, 40, 0), (255, 0, 0), 1120, 780, 100, 100, "Quit?")
         button((0, 255, 0), (90, 238, 90), 600, 780, 100, 100, "START?")
