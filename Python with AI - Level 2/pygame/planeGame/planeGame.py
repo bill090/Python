@@ -114,6 +114,7 @@ class Enemy:
             self.spawnAnimationTime += -1
             if self.spawnAnimationTime == 0:
                 self.spawning = False
+                self.runSpeed = 1
             if self.spawnAnimationTime % 10 == 0:
                 self.spawnSpeed += -1
         elif self.running:
@@ -133,7 +134,6 @@ class Enemy:
                 self.spawning = True
                 self.spawnAnimationTime = 50
                 self.spawnSpeed = 5
-                self.runSpeed = 1
                 self.runSpeedWait = 0
             if self.shot:
                 self.respawnWait += -1
@@ -345,12 +345,13 @@ while True:
 
         for bullet in missiles:
             for enemy in enemies:
-                if ((bullet.x + bullet.x_change + 50) > enemy.x and (bullet.x + bullet.x_change) < (enemy.x + 110)) and ((bullet.y + 50) > enemy.y and bullet.y < (enemy.y + enemyHeight)) and not(enemy.shot) and bullet in missiles and not(enemy.running):
+                if ((bullet.x + bullet.x_change + 50) > enemy.x and (bullet.x + bullet.x_change) < (enemy.x + 110)) and ((bullet.y + 50) > enemy.y and bullet.y < (enemy.y + enemyHeight)) and not(enemy.shot) and bullet in missiles:
                     enemy.die()
                     enemies.append(Enemy(random.randint(0, 1710), -100, False, 0, 1, 0, 0, 1, 0, random.randint(21, 41), 1, 0, random.randint(21, 41), 1, True, 50, 5, False, 1, 5))
                     for enemy2 in enemies:
-                        if enemy2.x + 110 > enemy.x - 100 and enemy2.x < enemy.x + 100 + 110 and not(enemy.spawning) and not(enemy2.shot) and not(enemy2 == enemy) and not enemy2.running and not enemy2.spawning:
+                        if enemy2.x + 110 > enemy.x - 100 and enemy2.x < enemy.x + 10 + 110 and not(enemy.spawning) and not(enemy2.shot) and not(enemy2 == enemy) and not enemy2.running and not enemy2.spawning:
                             enemy2.running = True
+                    enemy.running = False
                     missiles.remove(bullet)
             for mine in bombs:
                 if mine in bombs and bullet in missiles:
