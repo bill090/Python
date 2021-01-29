@@ -83,7 +83,7 @@ cloudImage = pygame.image.load("Python with AI - Level 2/pygame/planeGame/Cloud.
 # define enemy class
 
 class Enemy:
-    def __init__(self, x, y, shot, respawnWait, shootWait, x_change, y_change, xMovement, xMovementTime, xMovementTimeMax, yMovement, yMovementTime, yMovementTimeMax, speed, spawning, spawnAnimationTime, spawnSpeed):
+    def __init__(self, x, y, shot, respawnWait, shootWait, x_change, y_change, xMovement, xMovementTime, xMovementTimeMax, yMovement, yMovementTime, yMovementTimeMax, speed, spawning, spawnAnimationTime, spawnSpeed, running, runSpeed, runSpeedWait):
         self.x = x
         self.y = y
         self.shot = shot
@@ -101,18 +101,29 @@ class Enemy:
         self.spawning = spawning
         self.spawnAnimationTime = spawnAnimationTime
         self.spawnSpeed = spawnSpeed
+        self.running = running
+        self.runSpeed = runSpeed
+        self.runSpeedWait = runSpeedWait
     def move(self):
         self.x += self.x_change
         self.y += self.y_change
         return (int(self.x), int(self.y))
     def calculate(self):
         if self.spawning:
-            self.y += self.spawnSpeed
+            self.y_change = self.spawnSpeed
             self.spawnAnimationTime += -1
             if self.spawnAnimationTime == 0:
                 self.spawning = False
             if self.spawnAnimationTime % 10 == 0:
                 self.spawnSpeed += -1
+        elif self.running:
+            self.y_change = self.runSpeed
+            if self.runSpeedWait == 0:
+                self.runSpeed += -1
+                self.runSpeedWait = 5
+            else:
+                self.runSpeedWait += -1
+            self.x_change = 0
         else:
             if self.respawnWait == 0 and self.shot:
                 self.shot = False
@@ -122,6 +133,8 @@ class Enemy:
                 self.spawning = True
                 self.spawnAnimationTime = 50
                 self.spawnSpeed = 5
+                self.runSpeed = 1
+                self.runSpeedWait = 0
             if self.shot:
                 self.respawnWait += -1
             self.yMovementTime += 1
@@ -230,7 +243,7 @@ while True:
     x = 740
     y_change = 0
     y = 720
-    enemies = [Enemy(1700, -100, False, 0, 1, 0, 0, 1, 0, random.randint(21, 41), 1, 0, random.randint(21, 41), 1, True, 50, 5)]
+    enemies = [Enemy(1700, -100, False, 0, 1, 0, 0, 1, 0, random.randint(21, 41), 1, 0, random.randint(21, 41), 1, True, 50, 5, False, 1, 5)]
     bombs = []
     missiles = []
     shooting = False
@@ -332,9 +345,12 @@ while True:
 
         for bullet in missiles:
             for enemy in enemies:
-                if ((bullet.x + bullet.x_change + 50) > enemy.x and (bullet.x + bullet.x_change) < (enemy.x + 110)) and ((bullet.y + 50) > enemy.y and bullet.y < (enemy.y + enemyHeight)) and not(enemy.shot) and bullet in missiles:
+                if ((bullet.x + bullet.x_change + 50) > enemy.x and (bullet.x + bullet.x_change) < (enemy.x + 110)) and ((bullet.y + 50) > enemy.y and bullet.y < (enemy.y + enemyHeight)) and not(enemy.shot) and bullet in missiles and not(enemy.running):
                     enemy.die()
-                    enemies.append(Enemy(random.randint(0, 1710), -100, False, 0, 1, 0, 0, 1, 0, random.randint(21, 41), 1, 0, random.randint(21, 41), 1, True, 50, 5))
+                    enemies.append(Enemy(random.randint(0, 1710), -100, False, 0, 1, 0, 0, 1, 0, random.randint(21, 41), 1, 0, random.randint(21, 41), 1, True, 50, 5, False, 1, 5))
+                    for enemy2 in enemies:
+                        if enemy2.x + 110 > enemy.x - 100 and enemy2.x < enemy.x + 100 + 110 and not(enemy.spawning) and not(enemy2.shot) and not(enemy2 == enemy) and not enemy2.running and not enemy2.spawning:
+                            enemy2.running = True
                     missiles.remove(bullet)
             for mine in bombs:
                 if mine in bombs and bullet in missiles:
@@ -382,6 +398,9 @@ while True:
                 if enemy.shootWait == 0:
                     enemy.spawnBomb()
                     enemy.shootWait = 360
+            if enemy.y > 0 - enemyHeight and enemy.running:
+                enemy.spawning = True
+                enemy.running = False
 
         for mine in bombs:
             if mine.move()[1] > screenHeight:
