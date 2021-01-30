@@ -32,6 +32,7 @@ def displayMsg(msg, pos, fontSize):
     gameDisplay.blit(TextSurf, TextRect)
 
 def die():
+    playMus("Python with AI - Level 2/pygame/planeGame/Explosion+3.wav")
     exitingDeath = False
     gameDisplay.fill((255, 255, 255, 0))
     displayMsg("You died", (int(screenWidth / 2), int(screenHeight / 2)), 115)
@@ -235,11 +236,14 @@ for cloud in clouds:
 healthBarx = 810
 healthBary = 920
 
+volume = 100
+
 while True:
 
     # reset variables
 
-    volume = 100
+    playBackMusWait = 0
+    soundPlaying = False
     menuEnd = False
     dead = False
     x_change = 0
@@ -283,6 +287,12 @@ while True:
         frameUpdate()
         gameDisplay.fill((255, 255, 255, 0))
     pygame.mixer.music.set_volume(volume / 100)
+    
+    # play background music
+
+    playBackMus("Python with AI - Level 2/pygame/planeGame/gunfire.wav")
+
+    # start game loop
 
     while not dead:
         # events code
@@ -314,6 +324,8 @@ while True:
                     y_change = 0
                 elif event.key == pygame.K_SPACE:
                     shooting = False
+                    soundPlaying = True
+                    playBackMusWait = 80
 
         # movement code
 
@@ -358,6 +370,7 @@ while True:
                             enemy2.running = True
                     enemy.running = False
                     missiles.remove(bullet)
+                    soundPlaying = True
             for mine in bombs:
                 if mine in bombs and bullet in missiles:
                     if ((mine.x + 50) > bullet.x and mine.x < (bullet.x + 10)) and ((mine.y + 50) > bullet.y and mine.y < (bullet.y + 30)):
@@ -388,8 +401,11 @@ while True:
             missiles.append(Missile(x + 42, y - 30, x_change / 5, 5, 10, 1))
             shootDelay = 10
             maxShoot += -1
-        if maxShoot == 0:
+            playMus("Python with AI - Level 2/pygame/planeGame/gunfire.wav")
+        if maxShoot == 0 and shooting:
             shooting = False
+            soundPlaying = True
+            playBackMusWait = 80
         for bullet in missiles:
             if bullet.y > screenHeight or bullet.x > screenWidth or bullet.x < 0:
                 missiles.remove(bullet)
@@ -421,6 +437,14 @@ while True:
             draw((x, y), player)
         if invincibilityFrames == 0:
             invincibility = False
+        
+        # sound management
+
+        if playBackMusWait > 0:
+            playBackMusWait += -1
+        if playBackMusWait == 0 and soundPlaying:
+            playBackMus("Python with AI - Level 2/pygame/planeGame/background.wav")
+            soundPlaying = False
         
         frameUpdate()
         
