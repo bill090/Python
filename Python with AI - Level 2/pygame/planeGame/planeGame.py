@@ -85,7 +85,7 @@ def blitRotate(surf, image, pos, originPos, angle):
     pivot_move   = pivot_rotate - pivot
 
     # calculate the upper left origin of the rotated image
-    origin = (pos[0] - originPos[0] + min_box[0] - pivot_move[0], pos[1] - originPos[1] - max_box[1] + pivot_move[1])
+    origin = (int(pos[0] - originPos[0] + min_box[0] - pivot_move[0]), int(pos[1] - originPos[1] - max_box[1] + pivot_move[1]))
 
     # get a rotated image
     rotated_image = pygame.transform.rotate(image, angle)
@@ -107,7 +107,7 @@ cloudImage = pygame.image.load("Python with AI - Level 2/pygame/planeGame/Cloud.
 # define enemy class
 
 class Enemy:
-    def __init__(self, x, y, shot, respawnWait, shootWait, x_change, y_change, xMovement, xMovementTime, xMovementTimeMax, yMovement, yMovementTime, yMovementTimeMax, speed, spawning, spawnAnimationTime, spawnSpeed, running, runSpeed, runSpeedWait):
+    def __init__(self, x, y, shot, respawnWait, shootWait, x_change, y_change, xMovement, xMovementTime, xMovementTimeMax, yMovement, yMovementTime, yMovementTimeMax, speed, spawning, spawnAnimationTime, spawnSpeed, running, runSpeed, runSpeedWait, angle, rotation):
         self.x = x
         self.y = y
         self.shot = shot
@@ -128,11 +128,17 @@ class Enemy:
         self.running = running
         self.runSpeed = runSpeed
         self.runSpeedWait = runSpeedWait
+        self.angle = angle
+        self.rotation = rotation
     def move(self):
         self.x += self.x_change
         self.y += self.y_change
         return (int(self.x), int(self.y))
     def calculate(self):
+        if self.rotation > self.angle:
+            self.rotation += -1
+        if self.rotation < self.angle:
+            self.rotation += 1
         if self.spawning:
             self.y_change = self.spawnSpeed
             self.spawnAnimationTime += -1
@@ -141,6 +147,8 @@ class Enemy:
                 self.runSpeed = 1
             if self.spawnAnimationTime % 10 == 0:
                 self.spawnSpeed += -1
+            self.angle = 0
+            self.rotation = 0
         elif self.running:
             self.y_change = self.runSpeed
             if self.runSpeedWait == 0:
@@ -150,6 +158,10 @@ class Enemy:
                 self.runSpeedWait += -1
             self.x_change = 0
         else:
+            if self.xMovement == 1:
+                self.angle = -20
+            if self.xMovement == -1:
+                self.angle = 20
             if self.respawnWait == 0 and self.shot:
                 self.shot = False
                 self.x = random.randint(0, 1710)
@@ -194,13 +206,14 @@ class Bomb:
 # define missile class
 
 class Missile:
-    def __init__(self, x, y, direction, xSpeed, ySpeed, x_change):
+    def __init__(self, x, y, direction, xSpeed, ySpeed, x_change, rotation):
         self.x = x
         self.y = y
         self.direction = direction
         self.xSpeed = xSpeed
         self.ySpeed = ySpeed
         self.x_change = x_change
+        self.rotation = rotation
     def move(self):
         self.x_change += self.xSpeed * self.direction
         self.y += 0 - self.ySpeed
@@ -273,7 +286,7 @@ while True:
     x = 740
     y_change = 0
     y = 720
-    enemies = [Enemy(1700, -100, False, 0, 1, 0, 0, 1, 0, random.randint(21, 41), 1, 0, random.randint(21, 41), 1, True, 50, 5, False, 1, 5)]
+    enemies = [Enemy(1700, -100, False, 0, 1, 0, 0, 1, 0, random.randint(21, 41), 1, 0, random.randint(21, 41), 1, True, 50, 5, False, 1, 5, 0, 0)]
     bombs = []
     missiles = []
     shooting = False
@@ -316,7 +329,7 @@ while True:
     
     # play background music
 
-    playBackMus("Python with AI - Level 2/pygame/planeGame/gunfire.wav")
+    playBackMus("Python with AI - Level 2/pygame/planeGame/background.wav")
 
     # start game loop
 
@@ -362,7 +375,11 @@ while True:
         y += y_change
         x = int(x)
         y = int(y)
-        
+        if playerAngle > playerRotation:
+            playerAngle += -1
+        if playerAngle < playerRotation:
+            playerAngle += 1
+
         # health bar code:
 
         things(healthBarx, healthBary, 10, 30, (255, 0, 0))
@@ -377,12 +394,12 @@ while True:
 
         # Collision detection
 
-        if y < 0 or y + 81 > screenHeight or x < 0 or x + 110 > screenWidth:
+        if y - 80 < 0 or y + 80 > screenHeight or x - 55 < 0 or x + 55 > screenWidth:
             die()
             dead = True
 
         for mine in bombs:
-            if ((mine.x + 10) > x and mine.x < (x + 110)) and ((mine.y + 30) > y and mine.y < (y + 160)):
+            if ((mine.x + 10) > x - 55 and mine.x < (x + 55)) and ((mine.y + 30) > y - 80 and mine.y < (y + 80)):
                 if not(invincibility):
                     lives += -1
                     invincibility = True
@@ -391,12 +408,13 @@ while True:
 
         for bullet in missiles:
             for enemy in enemies:
-                if ((bullet.x + bullet.x_change + 50) > enemy.x and (bullet.x + bullet.x_change) < (enemy.x + 110)) and ((bullet.y + 50) > enemy.y and bullet.y < (enemy.y + enemyHeight)) and not(enemy.shot) and bullet in missiles:
+                if ((bullet.x + bullet.x_change + 50) > enemy.x - 55 and (bullet.x + bullet.x_change) < (enemy.x + 55)) and ((bullet.y + 50) > enemy.y - int(enemyHeight / 2) and bullet.y < (enemy.y + int(enemyHeight / 2))) and not(enemy.shot) and bullet in missiles:
                     enemy.die()
-                    enemies.append(Enemy(random.randint(0, 1710), -100, False, 0, 1, 0, 0, 1, 0, random.randint(21, 41), 1, 0, random.randint(21, 41), 1, True, 50, 5, False, 1, 5))
+                    enemies.append(Enemy(random.randint(0, 1710), -100, False, 0, 1, 0, 0, 1, 0, random.randint(21, 41), 1, 0, random.randint(21, 41), 1, True, 50, 5, False, 1, 5, 0, 0))
                     for enemy2 in enemies:
                         if enemy2.x + 110 > enemy.x - 100 and enemy2.x < enemy.x + 10 + 110 and not(enemy.spawning) and not(enemy2.shot) and not(enemy2 == enemy) and not enemy2.running and not enemy2.spawning:
                             enemy2.running = True
+                            enemy2.angle = 180
                     enemy.running = False
                     missiles.remove(bullet)
                     soundPlaying = True
@@ -407,7 +425,7 @@ while True:
                         missiles.remove(bullet)
 
         for enemy in enemies:
-            if ((x + 110 > enemy.x and x < (enemy.x + 110)) and ((y + 160) > enemy.y and y < (enemy.y + enemyHeight)) and not(enemy.shot)): 
+            if ((x + 55 > enemy.x - 55 and x - 55 < (enemy.x + 55)) and ((y + 80) > enemy.y - int(enemyHeight / 2) and y - 80 < (enemy.y + int(enemyHeight / 2))) and not(enemy.shot)): 
                 die()
                 dead = True
 
@@ -427,7 +445,7 @@ while True:
         if shootDelay > 0:
             shootDelay += -1
         if shooting and shootDelay == 0 and maxShoot != 0:
-            missiles.append(Missile(x + 42, y - 30, x_change / 5, 5, 10, 1))
+            missiles.append(Missile(x - 5, y - 30, x_change / 5, 10, 10, 1, playerRotation))
             shootDelay = 10
             maxShoot += -1
             playMus("Python with AI - Level 2/pygame/planeGame/gunfire.wav")
@@ -438,21 +456,21 @@ while True:
         for bullet in missiles:
             if bullet.y > screenHeight or bullet.x > screenWidth or bullet.x < 0:
                 missiles.remove(bullet)
-            draw(bullet.move(), missile)
+            blitRotate(gameDisplay, missile, bullet.move(), (int(missile.get_size()[0] / 2), int(missile.get_size()[1] / 2)), bullet.rotation)
 
         # Enemy code
 
         for enemy in enemies:
             enemy.calculate()
             if not(enemy.shot):
-                draw(enemy.move(), enemyPlane)
+                blitRotate(gameDisplay, enemyPlane, enemy.move(), (int(enemyPlane.get_size()[0] / 2), int(enemyPlane.get_size()[1] / 2)), enemy.rotation)
                 if enemy.shootWait == 0:
                     enemy.spawnBomb()
                     enemy.shootWait = 360
             if enemy.y > 0 - enemyHeight and enemy.running:
                 enemy.spawning = True
                 enemy.running = False
-
+            
         for mine in bombs:
             if mine.move()[1] > screenHeight:
                 bombs.remove(mine)
