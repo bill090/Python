@@ -231,6 +231,9 @@ for x in range(0, 15):
     clouds.append(Cloud(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1))
 for cloud in clouds:
     cloud.reset()
+    
+healthBarx = 810
+healthBary = 920
 
 while True:
 
@@ -256,6 +259,7 @@ while True:
     invincibilityFrames = 0
     for cloud in clouds:
         cloud.reset()
+    player = pygame.image.load("Python with AI - Level 2/pygame/planeGame/Player.png")
 
     # menu code
 
@@ -319,15 +323,16 @@ while True:
         y = int(y)
         
         # health bar code:
-        things(10, 10, 10, 30, (255, 0, 0))
+
+        things(healthBarx, healthBary, 10, 30, (255, 0, 0))
         if lives > 1:
-            things(30, 10, 10, 30, (255, 165, 0))
+            things(healthBarx + 20, healthBary, 10, 30, (255, 165, 0))
         if lives > 2:
-            things(50, 10, 10, 30, (255, 255, 0))
+            things(healthBarx + 40, healthBary, 10, 30, (255, 255, 0))
         if lives > 3:
-            things(70, 10, 10, 30, (90, 238, 90))
+            things(healthBarx + 60, healthBary, 10, 30, (90, 238, 90))
         if lives > 4:
-            things(90, 10, 10, 30, (0, 255, 0))
+            things(healthBarx + 80, healthBary, 10, 30, (0, 255, 0))
 
         # Collision detection
 
