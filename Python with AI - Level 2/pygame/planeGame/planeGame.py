@@ -70,6 +70,29 @@ def gameQuit():
 def draw(pos, image):
     gameDisplay.blit(image, pos)
 
+def blitRotate(surf, image, pos, originPos, angle):
+
+    # calcaulate the axis aligned bounding box of the rotated image
+    w, h       = image.get_size()
+    box        = [pygame.math.Vector2(p) for p in [(0, 0), (w, 0), (w, -h), (0, -h)]]
+    box_rotate = [p.rotate(angle) for p in box]
+    min_box    = (min(box_rotate, key=lambda p: p[0])[0], min(box_rotate, key=lambda p: p[1])[1])
+    max_box    = (max(box_rotate, key=lambda p: p[0])[0], max(box_rotate, key=lambda p: p[1])[1])
+
+    # calculate the translation of the pivot 
+    pivot        = pygame.math.Vector2(originPos[0], -originPos[1])
+    pivot_rotate = pivot.rotate(angle)
+    pivot_move   = pivot_rotate - pivot
+
+    # calculate the upper left origin of the rotated image
+    origin = (pos[0] - originPos[0] + min_box[0] - pivot_move[0], pos[1] - originPos[1] - max_box[1] + pivot_move[1])
+
+    # get a rotated image
+    rotated_image = pygame.transform.rotate(image, angle)
+
+    # rotate and blit the image
+    surf.blit(rotated_image, origin)
+
 # define planes and projectiles
 
 # Credit to @_ryan_#6862 for image 4 and player image
@@ -264,6 +287,9 @@ while True:
     for cloud in clouds:
         cloud.reset()
     player = pygame.image.load("Python with AI - Level 2/pygame/planeGame/Player.png")
+    playerRotation = 0
+    playerAngle = 0
+
 
     # menu code
 
@@ -306,8 +332,10 @@ while True:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                     x_change = -5
+                    playerRotation = 20                    
                 elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                     x_change = 5
+                    playerRotation = -20
                 elif event.key == pygame.K_UP or event.key == pygame.K_w:
                     y_change = -5
                 elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
@@ -320,6 +348,7 @@ while True:
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_a or event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                     x_change = 0
+                    playerRotation = 0
                 elif event.key == pygame.K_DOWN or event.key == pygame.K_s or event.key == pygame.K_UP or event.key == pygame.K_w:
                     y_change = 0
                 elif event.key == pygame.K_SPACE:
@@ -434,7 +463,7 @@ while True:
         if invincibility:
             invincibilityFrames += -1
         if invincibilityFrames % 2 == 0 or not(invincibility):
-            draw((x, y), player)
+            blitRotate(gameDisplay, player, (x, y), (int(player.get_size()[0] / 2), int(player.get_size()[1] / 2)), playerAngle)
         if invincibilityFrames == 0:
             invincibility = False
         
