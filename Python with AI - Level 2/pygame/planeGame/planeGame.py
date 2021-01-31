@@ -107,7 +107,7 @@ cloudImage = pygame.image.load("Python with AI - Level 2/pygame/planeGame/Cloud.
 # define enemy class
 
 class Enemy:
-    def __init__(self, x, y, shot, respawnWait, shootWait, x_change, y_change, xMovement, xMovementTime, xMovementTimeMax, yMovement, yMovementTime, yMovementTimeMax, speed, spawning, spawnAnimationTime, spawnSpeed, running, runSpeed, runSpeedWait, angle, rotation):
+    def __init__(self, x, y, shot, respawnWait, shootWait, x_change, y_change, xMovement, xMovementTime, xMovementTimeMax, yMovement, yMovementTime, yMovementTimeMax, speed, spawning, spawnAnimationTime, spawnSpeed, running, runSpeed, runSpeedWait):
         self.x = x
         self.y = y
         self.shot = shot
@@ -128,17 +128,11 @@ class Enemy:
         self.running = running
         self.runSpeed = runSpeed
         self.runSpeedWait = runSpeedWait
-        self.angle = angle
-        self.rotation = rotation
     def move(self):
         self.x += self.x_change
         self.y += self.y_change
         return (int(self.x), int(self.y))
     def calculate(self):
-        if self.rotation > self.angle:
-            self.rotation += -1
-        if self.rotation < self.angle:
-            self.rotation += 1
         if self.spawning:
             self.y_change = self.spawnSpeed
             self.spawnAnimationTime += -1
@@ -147,8 +141,6 @@ class Enemy:
                 self.runSpeed = 1
             if self.spawnAnimationTime % 10 == 0:
                 self.spawnSpeed += -1
-            self.angle = 0
-            self.rotation = 0
         elif self.running:
             self.y_change = self.runSpeed
             if self.runSpeedWait == 0:
@@ -286,7 +278,7 @@ while True:
     x = 740
     y_change = 0
     y = 720
-    enemies = [Enemy(1700, -100, False, 0, 1, 0, 0, 1, 0, random.randint(21, 41), 1, 0, random.randint(21, 41), 1, True, 50, 5, False, 1, 5, 0, 0)]
+    enemies = [Enemy(1700, -100, False, 0, 1, 0, 0, 1, 0, random.randint(21, 41), 1, 0, random.randint(21, 41), 1, True, 50, 5, False, 1, 5)]
     bombs = []
     missiles = []
     shooting = False
@@ -408,9 +400,9 @@ while True:
 
         for bullet in missiles:
             for enemy in enemies:
-                if ((bullet.x + bullet.x_change + 50) > enemy.x - 55 and (bullet.x + bullet.x_change) < (enemy.x + 55)) and ((bullet.y + 50) > enemy.y - int(enemyHeight / 2) and bullet.y < (enemy.y + int(enemyHeight / 2))) and not(enemy.shot) and bullet in missiles:
+                if ((bullet.x + bullet.x_change + 25) > enemy.x - 55 and (bullet.x + bullet.x_change - 25) < (enemy.x + 55)) and ((bullet.y + 25) > enemy.y - int(enemyHeight / 2) and bullet.y - 25 < (enemy.y + int(enemyHeight / 2))) and not(enemy.shot) and bullet in missiles:
                     enemy.die()
-                    enemies.append(Enemy(random.randint(0, 1710), -100, False, 0, 1, 0, 0, 1, 0, random.randint(21, 41), 1, 0, random.randint(21, 41), 1, True, 50, 5, False, 1, 5, 0, 0))
+                    enemies.append(Enemy(random.randint(0, 1710), -100, False, 0, 1, 0, 0, 1, 0, random.randint(21, 41), 1, 0, random.randint(21, 41), 1, True, 50, 5, False, 1, 5))
                     for enemy2 in enemies:
                         if enemy2.x + 110 > enemy.x - 100 and enemy2.x < enemy.x + 10 + 110 and not(enemy.spawning) and not(enemy2.shot) and not(enemy2 == enemy) and not enemy2.running and not enemy2.spawning:
                             enemy2.running = True
@@ -463,7 +455,7 @@ while True:
         for enemy in enemies:
             enemy.calculate()
             if not(enemy.shot):
-                blitRotate(gameDisplay, enemyPlane, enemy.move(), (int(enemyPlane.get_size()[0] / 2), int(enemyPlane.get_size()[1] / 2)), enemy.rotation)
+                blitRotate(gameDisplay, enemyPlane, enemy.move(), (int(enemyPlane.get_size()[0] / 2), int(enemyPlane.get_size()[1] / 2)), 0)
                 if enemy.shootWait == 0:
                     enemy.spawnBomb()
                     enemy.shootWait = 360
