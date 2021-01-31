@@ -358,7 +358,7 @@ while True:
         if zaWarudoTime <= 0 and zaWarudoEffect:
             zaWarudoEffect = False
             firstZaWarudo = False
-            playBackMus("Python with AI - Level 2/pygame/carGame/JoJo's Bizarre Adventure_Golden Wind OST_ _Giorno's Theme_.wav")
+            playBackMus("Python with AI - Level 2/pygame/carGame/background.wav")
         if zaWarudoCoolDown <= 0:
             zaWarudoCoolDownOver = True
 
