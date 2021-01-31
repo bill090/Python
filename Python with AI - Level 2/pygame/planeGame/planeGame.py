@@ -402,6 +402,7 @@ while True:
             for enemy in enemies:
                 if ((bullet.x + bullet.x_change + 25) > enemy.x - 55 and (bullet.x + bullet.x_change - 25) < (enemy.x + 55)) and ((bullet.y + 25) > enemy.y - int(enemyHeight / 2) and bullet.y - 25 < (enemy.y + int(enemyHeight / 2))) and not(enemy.shot) and bullet in missiles:
                     enemy.die()
+                    enemy.spawnSpeed = -1
                     enemies.append(Enemy(random.randint(0, 1710), -100, False, 0, 1, 0, 0, 1, 0, random.randint(21, 41), 1, 0, random.randint(21, 41), 1, True, 50, 5, False, 1, 5))
                     for enemy2 in enemies:
                         if enemy2.x + 110 > enemy.x - 100 and enemy2.x < enemy.x + 10 + 110 and not(enemy.spawning) and not(enemy2.shot) and not(enemy2 == enemy) and not enemy2.running and not enemy2.spawning:
