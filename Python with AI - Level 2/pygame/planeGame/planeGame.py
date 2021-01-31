@@ -138,7 +138,6 @@ class Enemy:
             self.spawnAnimationTime += -1
             if self.spawnAnimationTime == 0:
                 self.spawning = False
-                self.runSpeed = 1
             if self.spawnAnimationTime % 10 == 0:
                 self.spawnSpeed += -1
         elif self.running:
@@ -407,7 +406,7 @@ while True:
                     for enemy2 in enemies:
                         if enemy2.x + 110 > enemy.x - 100 and enemy2.x < enemy.x + 10 + 110 and not(enemy.spawning) and not(enemy2.shot) and not(enemy2 == enemy) and not enemy2.running and not enemy2.spawning:
                             enemy2.running = True
-                            enemy2.angle = 180
+                            enemy2.runSpeed = 1
                     enemy.running = False
                     missiles.remove(bullet)
                     soundPlaying = True
