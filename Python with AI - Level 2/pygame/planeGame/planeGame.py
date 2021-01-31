@@ -178,7 +178,7 @@ class Enemy:
             self.x_change = self.speed * self.xMovement
             self.shootWait += -1
     def spawnBomb(self):
-        bombs.append(Bomb(self.x + 30, self.y + enemyHeight, 5))
+        bombs.append(Bomb(self.x - 5, self.y + enemyHeight, 5))
     def die(self):
         self.shot = True
         self.respawnWait = 30
