@@ -1,3 +1,5 @@
+#!/usr/bin/env python3 
+
 import pygame
 import time
 import random
@@ -8,10 +10,10 @@ screenWidth = 1820
 screenHeight = 980
 gameDisplay = pygame.display.set_mode((screenWidth, screenHeight))
 clock = pygame.time.Clock()
-fireBallImg = pygame.image.load('Python with AI - Level 2/pygame/carGame/fireBall.png')
-carImg = pygame.image.load('Python with AI - Level 2/pygame/carGame/car.png')
+fireBallImg = pygame.image.load('fireBall.png')
+carImg = pygame.image.load('car.png')
 pygame.display.set_caption('Car Dodging')
-enemyCars = [pygame.image.load('Python with AI - Level 2/pygame/carGame/car4.png'), pygame.image.load('Python with AI - Level 2/pygame/carGame/car2.png'), pygame.image.load('Python with AI - Level 2/pygame/carGame/car3.png')]
+enemyCars = [pygame.image.load('car4.png'), pygame.image.load('car2.png'), pygame.image.load('car3.png')]
 enemyCarsWidths = [76, 76, 96]
 enemyCarsHeights = [166, 171, 201]
 def car(x, y, carImage):
@@ -24,7 +26,7 @@ def text_objects(text, font):
 def chrash():
     displayMsg("You died", (int(screenWidth / 2), int(screenHeight / 2)), 115)
     frameUpdate()
-    pygame.mixer.music.load("Python with AI - Level 2/pygame/carGame/Explosion+1.wav")
+    pygame.mixer.music.load("Explosion+1.wav")
     pygame.mixer.music.play()
     time.sleep(3)
 
@@ -188,7 +190,7 @@ while True:
 
     # This line starts the background music
 
-    playBackMus("Python with AI - Level 2/pygame/carGame/background.wav")
+    playBackMus("background.wav")
 
     # This is the game's loop
 
@@ -225,7 +227,7 @@ while True:
                     zaWarudoCoolDown = int(zaWarudoCoolDownTime/1)
                     zaWarudoTime = int(zaWarudoMaxTime/1) 
                     pygame.mixer.music.set_volume(3)
-                    playMus("Python with AI - Level 2/pygame/carGame/zaWarudo.wav")
+                    playMus("zaWarudo.wav")
                 if event.key == pygame.K_LSHIFT and not(fireBallLaunched) and ((not(unlimitedFireBalls) and fireBallsLeft > 0) or (unlimitedFireBalls and fireBallCoolDown == 0)):
                     fireBall(x, y - 148)
                     fireBallX = x
@@ -356,11 +358,11 @@ while True:
         if zaWarudoEffect:
             zaWarudoTime += -1
         if zaWarudoTime == 90:
-            playMus("Python with AI - Level 2/pygame/carGame/timeResumes.wav")
+            playMus("timeResumes.wav")
         if zaWarudoTime <= 0 and zaWarudoEffect:
             zaWarudoEffect = False
             firstZaWarudo = False
-            playBackMus("Python with AI - Level 2/pygame/carGame/background.wav")
+            playBackMus("background.wav")
         if zaWarudoCoolDown <= 0:
             zaWarudoCoolDownOver = True
 
