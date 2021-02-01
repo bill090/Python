@@ -32,6 +32,9 @@ def displayMsg(msg, pos, fontSize):
     gameDisplay.blit(TextSurf, TextRect)
 
 def die():
+    backGroundChannel.stop()
+    gunFireChannel.stop()
+    enemyGunFireChannel.stop()
     playMus("Python with AI - Level 2/pygame/planeGame/Explosion+3.wav")
     exitingDeath = False
     gameDisplay.fill((255, 255, 255, 0))
@@ -265,6 +268,14 @@ healthBary = 920
 
 volume = 100
 
+gunFire = pygame.mixer.Sound("Python with AI - Level 2/pygame/planeGame/gunfire.wav")
+explosion = pygame.mixer.Sound("Python with AI - Level 2/pygame/planeGame/Explosion+3.wav")
+backGround = pygame.mixer.Sound("Python with AI - Level 2/pygame/planeGame/background.wav")
+gunFire.set_volume(0.5)
+backGroundChannel = pygame.mixer.Channel(0)
+gunFireChannel = pygame.mixer.Channel(1)
+enemyGunFireChannel = pygame.mixer.Channel(2)
+
 while True:
 
     # reset variables
@@ -316,11 +327,13 @@ while True:
                     volume += 10
         frameUpdate()
         gameDisplay.fill((255, 255, 255, 0))
-    pygame.mixer.music.set_volume(volume / 100)
+    backGroundChannel.set_volume(volume / 100)
+    gunFireChannel.set_volume(volume / 100)
+    enemyGunFireChannel.set_volume(volume / 100)
     
     # play background music
 
-    playBackMus("Python with AI - Level 2/pygame/planeGame/background.wav")
+    backGroundChannel.play(backGround, -1)
 
     # start game loop
 
@@ -440,7 +453,7 @@ while True:
             missiles.append(Missile(x - 5, y - 30, x_change / 5, 10, 10, 1, playerRotation))
             shootDelay = 10
             maxShoot += -1
-            playMus("Python with AI - Level 2/pygame/planeGame/gunfire.wav")
+            gunFireChannel.play(gunFire, 1)
         if maxShoot == 0 and shooting:
             shooting = False
             soundPlaying = True
@@ -458,6 +471,7 @@ while True:
                 blitRotate(gameDisplay, enemyPlane, enemy.move(), (int(enemyPlane.get_size()[0] / 2), int(enemyPlane.get_size()[1] / 2)), 0)
                 if enemy.shootWait == 0:
                     enemy.spawnBomb()
+                    enemyGunFireChannel.play(gunFire, 1)
                     enemy.shootWait = 360
             if enemy.y > 0 - enemyHeight and enemy.running:
                 enemy.spawning = True
