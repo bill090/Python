@@ -473,7 +473,7 @@ while True:
                     enemy.spawnBomb()
                     enemyGunFireChannel.play(gunFire, 1)
                     enemy.shootWait = 360
-            if enemy.y > 0 - enemyHeight and enemy.running:
+            if enemy.y < 0 - enemyHeight and enemy.running:
                 enemy.spawning = True
                 enemy.running = False
             
