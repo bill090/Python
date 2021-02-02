@@ -332,6 +332,7 @@ while True:
     enemyGunFireChannel.set_volume(volume / 100)
     
     # play background music
+
     backGroundChannel.play(backGround, -1)
 
     # start game loop
