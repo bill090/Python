@@ -143,6 +143,7 @@ class Enemy:
                 self.spawning = False
             if self.spawnAnimationTime % 10 == 0:
                 self.spawnSpeed += -1
+            self.running = False
         elif self.running:
             self.y_change = self.runSpeed
             if self.runSpeedWait == 0:
@@ -152,10 +153,6 @@ class Enemy:
                 self.runSpeedWait += -1
             self.x_change = 0
         else:
-            if self.xMovement == 1:
-                self.angle = -20
-            if self.xMovement == -1:
-                self.angle = 20
             if self.respawnWait == 0 and self.shot:
                 self.shot = False
                 self.x = random.randint(0, 1710)
@@ -476,6 +473,10 @@ while True:
             if enemy.y < 0 - enemyHeight and enemy.running:
                 enemy.spawning = True
                 enemy.running = False
+            if not(enemy.running):
+                enemy.runSpeed = 1
+            if not(enemy.spawning):
+                enemy.spawnSpeed = 5
             
         for mine in bombs:
             if mine.move()[1] > screenHeight:
@@ -493,11 +494,9 @@ while True:
         
         # sound management
 
-        if playBackMusWait > 0:
-            playBackMusWait += -1
-        if playBackMusWait == 0 and soundPlaying:
-            playBackMus("Python with AI - Level 2/pygame/planeGame/background.wav")
-            soundPlaying = False
+        backGroundChannel.set_volume(volume / 100)
+        gunFireChannel.set_volume(volume / 100)
+        enemyGunFireChannel.set_volume(volume / 100)
         
         frameUpdate()
         
