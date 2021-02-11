@@ -75,7 +75,7 @@ def draw(pos, image):
 
 def blitRotate(surf, image, pos, originPos, angle):
 
-    # calcaulate the axis aligned bounding box of the rotated image
+    # calculate the axis aligned bounding box of the rotated image
     w, h       = image.get_size()
     box        = [pygame.math.Vector2(p) for p in [(0, 0), (w, 0), (w, -h), (0, -h)]]
     box_rotate = [p.rotate(angle) for p in box]
@@ -252,7 +252,9 @@ class Cloud:
         self.yMovementTimeMax = random.randint(41, 81)
         self.xMovementTime = 0
         self.yMovementTime = 0
-    
+
+# Explosion class
+
 class Explosion:
     def __init__(self):
         self.x = random.randint(0, 1770)
@@ -292,6 +294,21 @@ class Explosion:
             self.x_change = 5 * self.xDirection
             self.y_change = 5 * self.yDirection
 
+# enemyDeath class
+
+class enemyDeath:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.exist = True
+        self.timeLeft = 60
+    def move(self):
+        return (self.x, self.y)
+    def calculate(self):
+        self.timeLeft += -1
+        if self.timeLeft == 0:
+            self.exist = False
+
 # define other variables
 
 clouds = []
@@ -319,6 +336,7 @@ while True:
     # reset variables
 
     playBackMusWait = 0
+    graves = []
     soundPlaying = False
     menuEnd = False
     dead = False
@@ -460,6 +478,7 @@ while True:
             for enemy in enemies:
                 if ((bullet.x + bullet.x_change + 25) > enemy.x - 55 and (bullet.x + bullet.x_change - 25) < (enemy.x + 55)) and ((bullet.y + 25) > enemy.y - int(enemyHeight / 2) and bullet.y - 25 < (enemy.y + int(enemyHeight / 2))) and not(enemy.shot) and bullet in missiles:
                     enemy.die()
+                    graves.append(enemyDeath(enemy.x, enemy.y))
                     enemy.spawnSpeed = -1
                     enemies.append(Enemy(random.randint(0, 1710), -100, False, 0, 1, 0, 0, 1, 0, random.randint(21, 41), 1, 0, random.randint(21, 41), 1, True, 50, 5, False, 1, 5))
                     for enemy2 in enemies:
@@ -540,6 +559,14 @@ while True:
             blitRotate(gameDisplay, player, (x, y), (int(player.get_size()[0] / 2), int(player.get_size()[1] / 2)), playerAngle)
         if invincibilityFrames == 0:
             invincibility = False
+
+        # grave code
+
+        for grave in graves:
+            grave.calculate()
+            draw(grave.move(), explodeImage)
+            if not grave.exist:
+                graves.remove(grave)
         
         # sound management
 
