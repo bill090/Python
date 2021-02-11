@@ -106,6 +106,7 @@ missile = pygame.image.load("Python with AI - Level 2/pygame/planeGame/misslle.p
 bomb = pygame.image.load("Python with AI - Level 2/pygame/planeGame/B1.png")
 player = pygame.image.load("Python with AI - Level 2/pygame/planeGame/Player.png")
 cloudImage = pygame.image.load("Python with AI - Level 2/pygame/planeGame/Cloud.png")
+explodeImage = pygame.image.load("Python with AI - Level 2/pygame/planeGame/explosion.png")
 
 # define enemy class
 
@@ -251,6 +252,45 @@ class Cloud:
         self.yMovementTimeMax = random.randint(41, 81)
         self.xMovementTime = 0
         self.yMovementTime = 0
+    
+class Explosion:
+    def __init__(self):
+        self.x = random.randint(0, 1770)
+        self.xDirection = 1
+        self.x_change = 5
+        self.y = random.randint(0, 930)
+        self.yDirection = 1
+        self.y_change = 5
+        self.exploding = False
+        self.explodingWait = random.randint(15, 60)
+        self.explodingDuration = 60
+    def move(self):
+        self.x += self.x_change
+        self.y += self.y_change
+        return (self.x, self.y)
+    def calculate(self):
+        if self.exploding:
+            self.explodingDuration += -1
+        else:
+            self.explodingWait += -1
+        if self.explodingWait == 0:
+            self.exploding = True
+            self.explodingDuration = 60
+            self.explodingWait = random.randint(15, 60)
+        if self.explodingDuration == 0:
+            self.exploding = False
+            self.xDirection = 1
+            self.yDirection = 1
+        if self.x + 50 > 1820 or self.x < 0:
+            self.xDirection = self.xDirection * -1
+        if self.y + 50 > 980 or self.y < 0:
+            self.yDirection = self.yDirection * -1
+        if self.exploding:
+            self.x_change = 0
+            self.y_change = 0
+        else:
+            self.x_change = 5 * self.xDirection
+            self.y_change = 5 * self.yDirection
 
 # define other variables
 
@@ -272,6 +312,7 @@ gunFire.set_volume(0.5)
 backGroundChannel = pygame.mixer.Channel(0)
 gunFireChannel = pygame.mixer.Channel(1)
 enemyGunFireChannel = pygame.mixer.Channel(2)
+explosions = []
 
 while True:
 
@@ -301,6 +342,7 @@ while True:
     player = pygame.image.load("Python with AI - Level 2/pygame/planeGame/Player.png")
     playerRotation = 0
     playerAngle = 0
+    explosions = [Explosion(), Explosion(), Explosion(), Explosion(), Explosion(), Explosion(), Explosion(), Explosion(), Explosion()]
 
 
     # menu code
@@ -392,6 +434,13 @@ while True:
             things(healthBarx + 60, healthBary, 10, 30, (90, 238, 90))
         if lives > 4:
             things(healthBarx + 80, healthBary, 10, 30, (0, 255, 0))
+
+        # explosion management
+
+        for explosion in explosions:
+            explosion.calculate()
+            if explosion.exploding:
+                draw(explosion.move(), explodeImage)
 
         # Collision detection
 
