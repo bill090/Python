@@ -7,6 +7,13 @@
             <a href="{% url 'post_new' %}">+ New Post</a>
         </div>
     </header>
+
+    {% if user.is_authenticated %}
+        <p> Hello {{ user.username }}. <a href="{% url 'logout' %}">Log Out</a></p>
+    {% else %}
+        <p><a href="{% url 'login' %}">Log In</a>     <a href="{% url 'signup' %}">Sign Up</a></p>
+
+    {% endif %}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400">
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
