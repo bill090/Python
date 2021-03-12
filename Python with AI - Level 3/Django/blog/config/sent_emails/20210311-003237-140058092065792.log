@@ -1,0 +1,25 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Password reset on localhost:8000
+From: webmaster@localhost
+To: william.bw.liao@gmail.com
+Date: Thu, 11 Mar 2021 00:32:37 -0000
+Message-ID: <161542275744.30360.5914767062864011223@bdwbox.home>
+
+
+You're receiving this email because you requested a password reset for your user account at localhost:8000.
+
+Please go to the following page and choose a new password:
+
+http://localhost:8000/accounts/reset/MQ/ajblid-90061ae7634833223209b7300458ec83/
+
+Your username, in case you’ve forgotten: bill090
+
+Thanks for using our site!
+
+The localhost:8000 team
+
+
+
+-------------------------------------------------------------------------------
