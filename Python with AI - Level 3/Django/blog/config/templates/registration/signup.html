@@ -4,7 +4,7 @@
   <h2>Sign up</h2>
   <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign Up</button>
+    {{ form | crispy }}
+    <button type="submit" class="btn btn-success m1-2">Sign Up</button>
   </form>
 {% endblock %}
