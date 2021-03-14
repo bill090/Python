@@ -5,6 +5,10 @@
         <h2><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h2>
         <p>{{ post.body }}</p>
     </div>
-    <p><a href="{% url 'post_edit' post.pk %}">+ Edit</a></p>
-    <p><a href="{% url 'post_delete' post.pk %}">+ Delete</a></p>
+    {% if request.user == post.author %}
+        <p><a href="{% url 'post_edit' post.pk %}">+ Edit</a></p>
+    {% endif %}
+    {% if request.user == post.author or request.user.is_staff %}
+        <p><a href="{% url 'post_delete' post.pk %}">+ Delete</a></p>
+    {% endif %}
 {% endblock content %}
