@@ -3,12 +3,11 @@
 {% block content %}
     <div class="post-entry">
         <h2><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h2>
+        {{ post.author }}
         <p>{{ post.body }}</p>
     </div>
     {% if request.user == post.author %}
         <p><a href="{% url 'post_edit' post.pk %}">+ Edit</a></p>
-    {% endif %}
-    {% if request.user == post.author or request.user.is_staff %}
         <p><a href="{% url 'post_delete' post.pk %}">+ Delete</a></p>
     {% endif %}
 {% endblock content %}
